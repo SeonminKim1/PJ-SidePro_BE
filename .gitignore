@@ -1,0 +1,12 @@
+db.sqlite3
+chat/__pycache__/
+chat/migrations/
+project/__pycache__/
+project/migrations/
+sidepro/__pycache__/
+user/__pycache__/
+venv/
+my_settings.py
+__pycache__/
+recommand/migrations/
+user/migrations/
