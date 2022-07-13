@@ -82,7 +82,8 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 
 ## Default
 # =========== Setting Key by my_settings.py ===========
-DATABASES = my_settings.DATABASE
+# DATABASES = my_settings.MYSQL_DATABASE
+DATABASES = my_settings.POSTGRESQL_DATABASES
 
 ### SQLITE DB 사용 희망시 아래 주석 풀어서 사용
 """
