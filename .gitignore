@@ -1,12 +1,6 @@
-db.sqlite3
-chat/__pycache__/
-chat/migrations/
-project/__pycache__/
-project/migrations/
-sidepro/__pycache__/
-user/__pycache__/
-venv/
-my_settings.py
+.idea/
 __pycache__/
-recommand/migrations/
-user/migrations/
+migrations/
+venv/
+db.sqlite3
+my_settings.py

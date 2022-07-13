@@ -80,13 +80,18 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+## Default
+# =========== Setting Key by my_settings.py ===========
+DATABASES = my_settings.DATABASE
+
+### SQLITE DB 사용 희망시 아래 주석 풀어서 사용
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
-
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
