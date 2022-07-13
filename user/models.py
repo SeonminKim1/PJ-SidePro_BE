@@ -10,13 +10,22 @@ class MeetTime(models.Model):
     TIME_CHOICE = constants.TIME_CHOICE
     time_type = models.CharField("선호 시간대", choices=TIME_CHOICE, max_length=50)
 
+    class Meta:
+        db_table = "MEETTIME"
+
 class Region(models.Model):
     REGION_CHOICE = constants.REGION_CHOICE
     name = models.CharField('활동지역', choices=REGION_CHOICE, max_length=50)
 
+    class Meta:
+        db_table = "REGION"
+
 class Skills(models.Model):
     SKILLS_CHOICE = constants.SKILLS_CHOICE
     name = models.CharField('기술스택', choices=SKILLS_CHOICE, max_length=20)
+        
+    class Meta:
+        db_table = "SKILLS"
 
 # custom user model 사용 시 UserManager 클래스와 create_user, create_superuser 함수가 정의되어 있어야 함
 class UserManager(BaseUserManager):
@@ -74,6 +83,9 @@ class User(AbstractBaseUser):
     def is_staff(self): 
         return self.is_admin
 
+    class Meta:
+        db_table = "USER"
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name="유저",on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField("자기소개", null=True, blank=True)
@@ -82,5 +94,9 @@ class UserProfile(models.Model):
     skills = models.ManyToManyField(Skills, verbose_name='기술 스택')
     meet_time = models.ForeignKey(MeetTime, verbose_name="가능시간", on_delete=models.CASCADE, null=True, blank=True)
     region = models.ForeignKey(Region, verbose_name="활동지역", on_delete=models.CASCADE, null=True, blank=True)
+    
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        db_table = "USERPROFILE"

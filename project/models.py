@@ -19,7 +19,10 @@ class Project(models.Model):
     
     def __str__(self):
         return self.title
-        
+    
+    class Meta:
+        db_table = "PROJECT"
+
 # 댓글
 class Comment(models.Model):
     user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
@@ -27,6 +30,9 @@ class Comment(models.Model):
     comment = models.TextField("댓글내용")
     created_date = models.DateTimeField("작성날짜", auto_now_add=True)
     updated_date = models.DateTimeField("수정날짜", auto_now=True)
+    
     def __str__(self):
         return (f"{self.user} / {self.project} / {self.comment}")
     
+    class Meta:
+        db_table = "COMMENT"

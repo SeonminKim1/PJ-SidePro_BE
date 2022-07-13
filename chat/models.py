@@ -14,6 +14,9 @@ class Status(models.Model):
     def __str__(self):
         return self.status
 
+    class Meta:
+        db_table = "STATUS"
+
 # 채팅방 정보
 class Room(models.Model):
     owner = models.ForeignKey(User, verbose_name="본인", related_name = "owner", on_delete=models.CASCADE)
@@ -25,6 +28,9 @@ class Room(models.Model):
     def __str__(self):
         return f"{self.owner.username}, {self.opponent.username}의 채팅방"
 
+    class Meta:
+        db_table = "ROOM"
+
 # 채팅방 내용
 class Chat(models.Model):
     room = models.ForeignKey(Room, verbose_name="채팅방 정보", on_delete=models.CASCADE)
@@ -35,3 +41,6 @@ class Chat(models.Model):
 
     def __str__(self):
         return self.room
+
+    class Meta:
+        db_table = "CHAT"
