@@ -1,29 +1,22 @@
 # user/models.py
+from ast import Constant
+from asyncio import constants
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from user import constants
 
 class MeetTime(models.Model):        
     # 주중 선호, 주말 선호, 상관없음
-    TIME_CHOICE = (
-        ("주중 선호", "주중 선호"), ("주말 선호", "주말 선호"), ("상관없음", "상관없음")
-    )
+    TIME_CHOICE = constants.TIME_CHOICE
     time_type = models.CharField("선호 시간대", choices=TIME_CHOICE, max_length=50)
 
 class Region(models.Model):
-    ''' 활동지역
-    서울특별시, 경기도, 인천광역시, 세종특별자치시, 강원도, 충청북도, 충청남도, 대전광역시,
-    전라북도, 전라남도, 광주광역시, 경상북도, 경상남도, 대구광역시, 부산광역시, 울산광역시, 제주특별자치도)
-    '''
-    
-    REGION_CHOICE = (
-        ("서울", "서울"), ("경기", "경기"), ("인천", "인천"), ("세종", "세종"), ("강원", "강원"), 
-        ("충북", "충북"), ("충남", "충남"), ("전북", "전북"), ("전남", "전남"), ("광주", "광주"), 
-        ("대전", "대전"), ("대구", "대구"), ("부산", "부산"), ("울산", "울산"), ("제주", "제주")
-    )    
+    REGION_CHOICE = constants.REGION_CHOICE
     name = models.CharField('활동지역', choices=REGION_CHOICE, max_length=50)
 
 class Skills(models.Model):
-    name = models.CharField('기술스택', max_length=20)
+    SKILLS_CHOICE = constants.SKILLS_CHOICE
+    name = models.CharField('기술스택', choices=SKILLS_CHOICE, max_length=20)
 
 # custom user model 사용 시 UserManager 클래스와 create_user, create_superuser 함수가 정의되어 있어야 함
 class UserManager(BaseUserManager):
@@ -91,18 +84,3 @@ class UserProfile(models.Model):
     region = models.ForeignKey(Region, verbose_name="활동지역", on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return self.user.username
-
-
-# User
-# email  email
-# password  charfield=300
-# username  charfield=150
-
-# User_profile
-# user  OneToOne
-# image filefield
-# github_url  urlfield
-# skills  manytomany (기술스택)
-# introduce  textfield 
-# meet_time  foreignkey (가능시간대)
-# region  foreignkey  (활동지역)
