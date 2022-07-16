@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 
-from project.serializers import BookmarkSerializer
+# from project.serializers import BookmarkSerializer
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
-    bookmark = BookmarkSerializer(many=True)
+    # bookmark = BookmarkSerializer(many=True)
     
     class Meta:
         model = UserModel
@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
             "username",
             "join_date",
-            "bookmark",
+            # "bookmark",
             "userprofile",
         ]
 
