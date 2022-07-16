@@ -7,8 +7,8 @@ from .models import User
 class UserRegistrationTest(APITestCase):
     # 모든 테스트 시작 전 호출되는 함수
     def setUp(self):
-        self.data = {"email": "ggg@ggg.com", "password":"ggg"}
-        self.user = User.objects.create_user("ggg@ggg.com", "ggg")
+        self.data = {"email": "test@mail.com", "password":"test"}
+        self.user = User.objects.create_user("test@mail.com", "test")
         
     # 모든 테스트 마지막 호출 되는 함수
     def tearDown(self):
@@ -16,12 +16,12 @@ class UserRegistrationTest(APITestCase):
     
     # 중복된 아이디로 회원가입 시 (400)
     def test_registration_duplicate(self):
-        url = reverse("user_view")
+        url = reverse("join_view")
         user_data = {
-            "email" : "ggg@ggg.com",
-            "fullname": "GGG",
-            "password": "ggg",
-            "password_confirm": "ggg"
+            "email" : "test@mail.com",
+            "username": "중복",
+            "password": "test",
+            "password_confirm": "test"
         }
         response = self.client.post(url, user_data)
         # print(response.data)
@@ -29,12 +29,12 @@ class UserRegistrationTest(APITestCase):
         
     # 정상적인 회원가입 (201)
     def test_registration(self):
-        url = reverse("user_view")
+        url = reverse("join_view")
         user_data = {
-            "email" : "hhh@hhh.com",
-            "fullname": "hhh",
-            "password": "hhh",
-            "password_confirm": "hhh"
+            "email" : "newtest@mail.com",
+            "username": "패스",
+            "password": "newtest",
+            "password_confirm": "newtest"
         }
         response = self.client.post(url, user_data)
         # print(response.data)
@@ -44,10 +44,10 @@ class UserRegistrationTest(APITestCase):
 class LoginUserTest(APITestCase):
     # 로그인 테스트할 계정
     def setUp(self):
-        self.data = {"email": "ggg@ggg.com", "password":"ggg"}
-        self.data_none_pwd = {"email": "ggg@ggg.com"}
-        self.data_none_email = {"password":"ggg"}
-        self.user = User.objects.create_user("ggg@ggg.com", "ggg")
+        self.data = {"email": "test@mail.com", "password":"test"}
+        self.data_none_pwd = {"email": "test@mail.com"}
+        self.data_none_email = {"password":"test"}
+        self.user = User.objects.create_user("test@mail.com", "test")
         
     # 정상 로그인
     def test_login(self):
