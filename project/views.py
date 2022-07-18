@@ -38,7 +38,7 @@ class ProjectAPIView(APIView):
     
     # 게시글 쓰기
     def post(self, request):
-        request.data["user"] = request.user.id
+        request.data["user"] = 2
         project_serializer = ProjectSerializer(data=request.data)
         project_serializer.is_valid(raise_exception=True)
         project_serializer.save()
