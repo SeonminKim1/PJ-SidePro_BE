@@ -1,3 +1,4 @@
+from functools import partial
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -34,6 +35,7 @@ class ProjectAPIView(APIView):
         project = Project.objects.all()
         project_serializer = ProjectSerializer(project, many=True)
         return Response(project_serializer.data, status=status.HTTP_200_OK)
+    
     # 게시글 쓰기
     def post(self, request):
         request.data["user"] = request.user.id
@@ -44,9 +46,21 @@ class ProjectAPIView(APIView):
 
 # project/<int>
 class ProjectDetailAPIView(APIView):
+    # 게시물 하나 자세히 보기
     def get(self, request, project_id):
-        return Response()
+        project = Project.objects.get(id=project_id)
+        serializer = ProjectDetailSerializer(project)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # 게시글 수정
     def put(self, request, project_id):
-        return Response()
+        project = Project.objects.get(id=project_id)
+        serializer = ProjectDetailSerializer(project, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # 게시글 삭제
     def delete(self, request, project_id):
-        return Response()
+        Project.objects.get(id=project_id).delete()
+        return Response({"success": "게시글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
