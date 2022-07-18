@@ -80,17 +80,17 @@ class CommentAPIView(APIView):
         serializer.save()
         return Response (serializer.data, status=status.HTTP_200_OK)
 
-# project/<projcet_id>/comment/<review_id>
+# project/<projcet_id>/comment/<comment_id>
 class CommentModifyAPIView(APIView):
     # 댓글 수정
-    def put(self, request, project_id, review_id):
-        comment = Comment.objects.get(id=review_id, project=project_id)
+    def put(self, request, project_id, comment_id):
+        comment = Comment.objects.get(id=comment_id, project=project_id)
         serializer = CommentSerializer(comment, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 댓글 삭제
-    def delete(self, request, project_id, review_id):
-        Comment.objects.get(id=review_id, project=project_id).delete()
+    def delete(self, request, project_id, comment_id):
+        Comment.objects.get(id=comment_id, project=project_id).delete()
         return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
