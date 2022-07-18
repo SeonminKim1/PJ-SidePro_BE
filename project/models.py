@@ -1,3 +1,4 @@
+# project(app)/models.py
 from datetime import timedelta
 from datetime import datetime
 from django.db import models
@@ -6,7 +7,6 @@ from user.models import User, Skills
 
 # 프로젝트(게시글)
 class Project(models.Model):
-    #글 작성자, 글 제목, 카테고리, 글 내용
     user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
     title = models.CharField("제목", max_length=50)
     skills = models.ManyToManyField(Skills, verbose_name="카테고리")
