@@ -3,10 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
-from .models import Project
-from .serializers import ProjectSerializer, ProjectDetailSerializer
+import project
+
+from .models import Comment, Project
+from .serializers import CommentSerializer, ProjectSerializer, ProjectDetailSerializer
 
 import boto3
+
+from project import serializers
 
 # project/upload/
 class UploadS3(APIView):
@@ -44,7 +48,7 @@ class ProjectAPIView(APIView):
         project_serializer.save()
         return Response(project_serializer.data, status=status.HTTP_200_OK)
 
-# project/<int>
+# project/<project_id>
 class ProjectDetailAPIView(APIView):
     # 게시물 하나 자세히 보기
     def get(self, request, project_id):
@@ -64,3 +68,29 @@ class ProjectDetailAPIView(APIView):
     def delete(self, request, project_id):
         Project.objects.get(id=project_id).delete()
         return Response({"success": "게시글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+    
+# project/<project_id>/comment/
+class CommentAPIView(APIView):
+    # 댓글 작성
+    def post(self, request, project_id):
+        request.data["user"] = 2
+        request.data["project"] = project_id
+        serializer = CommentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response (serializer.data, status=status.HTTP_200_OK)
+
+# project/<projcet_id>/comment/<review_id>
+class CommentModifyAPIView(APIView):
+    # 댓글 수정
+    def put(self, request, project_id, review_id):
+        comment = Comment.objects.get(id=review_id, project=project_id)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # 댓글 삭제
+    def delete(self, request, project_id, review_id):
+        Comment.objects.get(id=review_id, project=project_id).delete()
+        return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
