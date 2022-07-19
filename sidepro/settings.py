@@ -43,9 +43,10 @@ INSTALLED_APPS = [
     'project',
     'chat',
     'rest_framework',
-    'corsheaders',
-    # 'rest_framework-simplejwt',
+    'rest_framework_simplejwt',
+    'corsheaders'
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -149,7 +150,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [ # session 혹은 token을 인증 할 클래스 설정
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PARSER_CLASSES': [ # request.data 속성에 액세스 할 때 사용되는 파서 지정
         'rest_framework.parsers.JSONParser',
@@ -159,3 +161,8 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'user.User' # app.model
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+]
