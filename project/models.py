@@ -1,5 +1,3 @@
-from datetime import timedelta
-from datetime import datetime
 from django.db import models
 from user.models import User, Skills
 
