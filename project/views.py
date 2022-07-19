@@ -1,16 +1,16 @@
-from functools import partial
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
-import project
-
 from .models import Comment, Project
 from .serializers import CommentSerializer, ProjectSerializer, ProjectDetailSerializer
 
+# S3 업로드 관련
 import boto3
+import my_settings
 
-from project import serializers
+# 페이지네이션 관련
+from .pagination import PaginationHandlerMixin, BasePagination
 
 # project/upload/
 class UploadS3(APIView):
@@ -18,7 +18,13 @@ class UploadS3(APIView):
     def post(self, request):
         file = request.data["file"]
         print(file)
-        s3 = boto3.client('s3')
+        # s3 = boto3.client('s3')
+        
+        s3 = boto3.client('s3', 
+                          aws_access_key_id = my_settings.AWS_ACCESS_KEY,
+                          aws_secret_access_key = my_settings.AWS_SECRET_KEY,
+                          region_name = my_settings.REGION_NAME,
+                          )
         
         file_name = str(file).split('.')[0]
         file_extension = str(file).split('.')[1]
@@ -33,12 +39,23 @@ class UploadS3(APIView):
         return Response({"success":"업로드 성공!", "url": url})
 
 # project/
-class ProjectAPIView(APIView):
+class ProjectAPIView(APIView, PaginationHandlerMixin):
+    pagination_class = BasePagination
+    
     # 모든 게시물 출력
     def get(self, request):
         project = Project.objects.all()
-        project_serializer = ProjectSerializer(project, many=True)
+        page = self.paginate_queryset(project) # page_size, page에 따른 pagination 처리된 결과값
+        # 페이징 처리가 된 결과가 반환되었을 경우
+        if page is not None:
+            # 페이징 처리된 결과를 serializer에 담아서 결과 값 가공
+            project_serializer = self.get_paginated_response(ProjectSerializer(page, many=True).data)
+        # 페이징 처리 필요 없는 경우
+        else:
+            project_serializer = ProjectSerializer(project, many=True)
+            
         return Response(project_serializer.data, status=status.HTTP_200_OK)
+            
     
     # 게시글 쓰기
     def post(self, request):
