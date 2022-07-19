@@ -1,24 +1,25 @@
-from functools import partial
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
-
-import project
 
 from .models import Comment, Project
 from .serializers import CommentSerializer, ProjectSerializer, ProjectDetailSerializer
 
 import boto3
-
-from project import serializers
-
+import my_settings
 # project/upload/
 class UploadS3(APIView):
     # S3에 이미지 업로드 후 URL 리턴
     def post(self, request):
         file = request.data["file"]
         print(file)
-        s3 = boto3.client('s3')
+        # s3 = boto3.client('s3')
+        
+        s3 = boto3.client('s3', 
+                          aws_access_key_id = my_settings.AWS_ACCESS_KEY,
+                          aws_secret_access_key = my_settings.AWS_SECRET_KEY,
+                          region_name = my_settings.REGION_NAME,
+                          )
         
         file_name = str(file).split('.')[0]
         file_extension = str(file).split('.')[1]
