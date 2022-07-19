@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     'project',
     'chat',
     'rest_framework',
+    'corsheaders',
     # 'rest_framework-simplejwt',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +56,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# FE의 주소값을 입력해주어야한다.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
 ]
 
 ROOT_URLCONF = 'sidepro.urls'
@@ -86,13 +94,13 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 DATABASES = my_settings.POSTGRESQL_DATABASES
 
 ### SQLITE DB 사용 희망시 아래 주석 풀어서 사용
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}"""
+# """
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
