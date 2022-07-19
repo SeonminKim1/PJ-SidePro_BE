@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    "corsheaders",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +49,18 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders'
 ]
+
+ASGI_APPLICATION = 'sidepro.asgi.application'
+
+# Channel layers => redis
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer', 
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 MIDDLEWARE = [
@@ -67,10 +82,12 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'sidepro.urls'
 
+import os
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates') # myprojet/templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,11 +144,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_L10N = True
+
+USE_TZ = False  # 원래 True KOREA Time을 위한 False 설정
 
 
 # Static files (CSS, JavaScript, Images)

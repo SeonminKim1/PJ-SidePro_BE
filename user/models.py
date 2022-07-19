@@ -1,6 +1,4 @@
 # user/models.py
-from ast import Constant
-from asyncio import constants
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from user import constants
