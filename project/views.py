@@ -52,7 +52,7 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
             project_serializer = self.get_paginated_response(ProjectSerializer(page, many=True).data)
         # 페이징 처리 필요 없는 경우
         else:
-            project_serializer = self.rojectSerializer(project, many=True)
+            project_serializer = ProjectSerializer(project, many=True)
             
         return Response(project_serializer.data, status=status.HTTP_200_OK)
             
