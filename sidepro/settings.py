@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    "corsheaders",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,9 +46,22 @@ INSTALLED_APPS = [
     'project',
     'chat',
     'rest_framework',
-    'corsheaders',
-    # 'rest_framework-simplejwt',
+    'rest_framework_simplejwt',
+    'corsheaders'
 ]
+
+ASGI_APPLICATION = 'sidepro.asgi.application'
+
+# Channel layers => redis
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer', 
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -66,10 +82,12 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'sidepro.urls'
 
+import os
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates') # myprojet/templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,11 +144,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_L10N = True
+
+USE_TZ = False  # 원래 True KOREA Time을 위한 False 설정
 
 
 # Static files (CSS, JavaScript, Images)
@@ -149,7 +169,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [ # session 혹은 token을 인증 할 클래스 설정
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PARSER_CLASSES': [ # request.data 속성에 액세스 할 때 사용되는 파서 지정
         'rest_framework.parsers.JSONParser',
@@ -159,3 +180,8 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'user.User' # app.model
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+]
