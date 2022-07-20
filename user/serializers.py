@@ -8,17 +8,17 @@ from .models import UserProfile as UserProfileModel
 
 class UserProfileSerializer(serializers.ModelSerializer):
     skills = serializers.SerializerMethodField()
-    # meet_time = serializers.SerializerMethodField()
-    # region = serializers.SerializerMethodField()
+    meet_time = serializers.SerializerMethodField()
+    region = serializers.SerializerMethodField()
 
     def get_skills(self, obj):
         return [skills.name for skills in obj.skills.all()]
     
-    # def get_meet_time(self, obj):
-    #     return obj.meet_time.time_type
+    def get_meet_time(self, obj):
+        return obj.meet_time.time_type
     
-    # def get_region(self, obj):
-    #     return obj.region.name
+    def get_region(self, obj):
+        return obj.region.name
     
     class Meta:
         model = UserProfileModel
