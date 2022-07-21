@@ -40,7 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
 class ChatRoomUserlistSerializer(serializers.ModelSerializer):
     user1 = UserSerializer()
     user2 = UserSerializer()
+    status_update_user = UserSerializer()
     status = serializers.SerializerMethodField()
+
     def get_status(self, obj):
         return obj.status.status
 
@@ -51,6 +53,7 @@ class ChatRoomUserlistSerializer(serializers.ModelSerializer):
             "user1",
             "user2",
             "status",
+            "status_update_user",
             "lasted_time",
             "lasted_message",
         ]
@@ -88,6 +91,8 @@ class ChatRoomMessagesSerializer(serializers.ModelSerializer):
     def get_status(self, obj):
         return obj.status.status
 
+    status_update_user = UserSerializer()
+
     chatmessages = ChatMessagesSerializer(many=True, source="chat_set")
     
     class Meta:
@@ -97,6 +102,7 @@ class ChatRoomMessagesSerializer(serializers.ModelSerializer):
             "user1", 
             "user2", 
             "status", 
+            "status_update_user",
             "lasted_time", 
             "lasted_message", 
             "chatmessages",
