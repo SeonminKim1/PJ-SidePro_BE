@@ -186,8 +186,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
 ]
 
+# JWT 관련 세부 설정 (생략 가능)
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=600),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'TOKEN_USER_CLASS': 'user.User',
+    'TOKEN_USER_CLASS': 'user.User'
 }

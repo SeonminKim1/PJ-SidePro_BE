@@ -1,46 +1,64 @@
 from rest_framework import serializers
 
-from user.models import User as UserModel
-from user.models import UserProfile as UserProfileModel
+from user.models import User, UserProfile
 from .models import Chat, Room, Status
 
 # 채팅 가능 Userlist Return Serializrs
-class ChatUserProfileSerializer(serializers.ModelSerializer):
-    skills = serializers.SerializerMethodField()
-    meet_time = serializers.SerializerMethodField()
-    region = serializers.SerializerMethodField()
+class UserProfileSerializer(serializers.ModelSerializer):
+    # skills = serializers.SerializerMethodField()
+    # meet_time = serializers.SerializerMethodField()
+    # region = serializers.SerializerMethodField()
 
-    def get_skills(self, obj):
-        return [skills.name for skills in obj.skills.all()][:3]
+    # def get_skills(self, obj):
+    #     return [skills.name for skills in obj.skills.all()][:3]
     
-    def get_meet_time(self, obj):
-        return obj.meet_time.time_type
+    # def get_meet_time(self, obj):
+    #     return obj.meet_time.time_type
     
-    def get_region(self, obj):
-        return obj.region.name
+    # def get_region(self, obj):
+    #     return obj.region.name
     
     class Meta:
-        model = UserProfileModel
+        model = UserProfile
         fields = [
             "profile_image",
-            "skills",
-            "meet_time",
-            "region",
+            "github_url",
         ]
 
-class ChatUserSerializer(serializers.ModelSerializer):
-    userprofile = ChatUserProfileSerializer()
+
+class UserSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer()
     # last_mesaage 필요
     class Meta:
-        model = UserModel
+        model = User
         fields = [
             "username",
-            "userprofile",
             "last_login",
+            "userprofile",
+        ]
+
+class ChatRoomUserlistSerializer(serializers.ModelSerializer):
+    user1 = UserSerializer()
+    user2 = UserSerializer()
+    status_update_user = UserSerializer()
+    status = serializers.SerializerMethodField()
+
+    def get_status(self, obj):
+        return obj.status.status
+
+    class Meta:
+        model = Room
+        fields = [
+            "name",
+            "user1",
+            "user2",
+            "status",
+            "status_update_user",
+            "lasted_time",
+            "lasted_message",
         ]
 
 # 채팅 내역 Return Serilaizers
-
 class ChatMessagesSerializer(serializers.ModelSerializer):
     send_user = serializers.SerializerMethodField()
     def get_send_user(self, obj):
@@ -73,6 +91,8 @@ class ChatRoomMessagesSerializer(serializers.ModelSerializer):
     def get_status(self, obj):
         return obj.status.status
 
+    status_update_user = UserSerializer()
+
     chatmessages = ChatMessagesSerializer(many=True, source="chat_set")
     
     class Meta:
@@ -82,6 +102,7 @@ class ChatRoomMessagesSerializer(serializers.ModelSerializer):
             "user1", 
             "user2", 
             "status", 
+            "status_update_user",
             "lasted_time", 
             "lasted_message", 
             "chatmessages",
