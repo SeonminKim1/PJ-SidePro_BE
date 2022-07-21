@@ -16,10 +16,11 @@ class Status(models.Model):
 
 # 채팅방 정보
 class Room(models.Model):
-    name = models.CharField(verbose_name="방이름", max_length=30)
-    user1 = models.ForeignKey(User, verbose_name="본인", related_name = "owner", on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User, verbose_name="채팅상대", related_name = "opponent", on_delete=models.CASCADE)
+    name = models.CharField(verbose_name="방이름", max_length=256)
+    user1 = models.ForeignKey(User, verbose_name="본인", related_name = "user1", on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User, verbose_name="채팅상대", related_name = "user2", on_delete=models.CASCADE)
     status = models.ForeignKey(Status, verbose_name="채팅방 상태", on_delete=models.CASCADE)
+    status_update_user = models.ForeignKey(User, verbose_name="채팅방 상태 마지막 업데이트 유저", related_name = 'status_update_user', on_delete=models.CASCADE)
     lasted_time = models.DateTimeField("마지막 메시지 시간", auto_now=True)
     lasted_message = models.TextField("마지막 메세지")
     
