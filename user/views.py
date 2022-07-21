@@ -1,11 +1,14 @@
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .models import User as UserModel, UserProfile
-from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from .models import User as UserModel
+from .models import UserProfile as UserProfileModel
+from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
+
+from project.models import Project as ProjectModel
+from project.serializers import ProjectViewSerializer
 # S3 업로드 관련
 import boto3
 import my_settings
@@ -62,7 +65,7 @@ class UserAPIView(APIView):
     
     # 로그인한 유저프로필 수정
     def put(self, request):
-        user = UserProfile.objects.get(user_id=request.user.id)
+        user = UserProfileModel.objects.get(user_id=request.user.id)
         serializer = UserProfileDetailSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -86,3 +89,27 @@ class AnotherUserAPIView(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+
+
+# user/profile/project/
+class MyProjectView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    # 나의 프로젝트 출력
+    def get(self, request):
+        project = ProjectModel.objects.filter(user_id=request.user.pk)
+        project_serializer = ProjectViewSerializer(project, many=True)
+        return Response(project_serializer.data, status=status.HTTP_200_OK)
+    
+    
+# user/profile/project/bookmark
+class MyBookmarkProjectView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    # 내가 북마크한 프로젝트 출력
+    def get(self, request):
+        project = ProjectModel.objects.filter(bookmark=request.user.pk)
+        project_serializer = ProjectViewSerializer(project, many=True)
+        return Response(project_serializer.data, status=status.HTTP_200_OK)
