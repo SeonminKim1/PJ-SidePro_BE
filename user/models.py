@@ -53,8 +53,6 @@ class User(AbstractBaseUser):
     password = models.CharField("비밀번호", max_length=300)
     username = models.CharField("이름", max_length=30, null=False, blank=False)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
-    
-    bookmark = models.ManyToManyField("project.Project", related_name="bookmarks", blank=True)
 
     is_active = models.BooleanField(default=True) # 계정활성화 여부
     is_admin = models.BooleanField(default=False) # 관리자 계정 여부

@@ -15,6 +15,8 @@ class Project(models.Model):
     created_date = models.DateTimeField("생성날짜", auto_now_add=True)
     updated_date = models.DateTimeField("수정날짜", auto_now=True)
     
+    bookmark = models.ManyToManyField(User, related_name="bookmarks", blank=True)
+    
     def __str__(self):
         return self.title
     

@@ -32,10 +32,10 @@ class ProjectDetailViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProjectModel
-        fields = ["user", "title", "skills",
+        fields = ["id","user", "title", "skills",
                   "thumnail_img_path", "content",
                   "count", "github_url", 
-                  "created_date", "updated_date","comment"]
+                  "created_date", "updated_date","comment", "bookmark"]
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,10 +49,4 @@ class ProjectViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectModel
         fields = "__all__"           
-            
         
-            
-            
-            
-            
-            

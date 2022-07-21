@@ -115,3 +115,16 @@ class CommentModifyAPIView(APIView):
     def delete(self, request, project_id, comment_id):
         Comment.objects.get(id=comment_id, project=project_id).delete()
         return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+
+# project/<int:project_id>/bookmark/
+class BookmarkAPIView(APIView):
+    # 북마크 클릭 시
+    def post(self, request, project_id):
+        project = Project.objects.get(id=project_id)
+        bookmark = project.bookmark.all()
+        if request.user in bookmark:
+            project.bookmark.remove(request.user)
+            return Response({"msg:": "북마크 해제 완료!"})
+        else:
+            project.bookmark.add(request.user)        
+        return Response({"msg": "북마크 등록 완료!"})
