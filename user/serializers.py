@@ -30,7 +30,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "meet_time",
             "region",
         ]
-
+    
 
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()

@@ -8,12 +8,14 @@ class Project(models.Model):
     user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
     title = models.CharField("제목", max_length=50)
     skills = models.ManyToManyField(Skills, verbose_name="카테고리")
-    thumnail_img_path = models.FileField(upload_to="", verbose_name="썸네일")
+    thumnail_img_path = models.FileField(verbose_name="썸네일", null=True)
     content = models.TextField("글내용")
     count = models.PositiveIntegerField("조회수", default=0)
     github_url = models.URLField("레포지토리주소")
     created_date = models.DateTimeField("생성날짜", auto_now_add=True)
     updated_date = models.DateTimeField("수정날짜", auto_now=True)
+    
+    bookmark = models.ManyToManyField(User, related_name="bookmarks", blank=True)
     
     def __str__(self):
         return self.title
