@@ -30,8 +30,14 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             
 class ProjectSerializer(serializers.ModelSerializer):
     skills = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    
     def get_skills(self, obj): 
         return [skills.name for skills in obj.skills.all()]
+    
+    def get_user(self, obj):
+        return obj.user.username    
+    
     class Meta:
         model = ProjectModel
         fields = "__all__"
