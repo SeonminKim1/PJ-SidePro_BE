@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 
+
 # from project.serializers import BookmarkSerializer
 
 
@@ -30,7 +31,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "meet_time",
             "region",
         ]
-    
+        
+
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileModel
+        fields = "__all__"
+
 
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
@@ -40,7 +47,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = [
             "email",
-            "password",
             "username",
             "join_date",
             # "bookmark",

@@ -7,21 +7,30 @@ class MeetTime(models.Model):
     # 주중 선호, 주말 선호, 상관없음
     TIME_CHOICE = constants.TIME_CHOICE
     time_type = models.CharField("선호 시간대", choices=TIME_CHOICE, max_length=50)
-
+    
+    def __str__(self):
+        return f"{self.pk}. {self.time_type}"
+    
     class Meta:
         db_table = "MEETTIME"
 
 class Region(models.Model):
     REGION_CHOICE = constants.REGION_CHOICE
     name = models.CharField('활동지역', choices=REGION_CHOICE, max_length=50)
-
+    
+    def __str__(self):
+        return f"{self.pk}. {self.name}"
+    
     class Meta:
         db_table = "REGION"
 
 class Skills(models.Model):
     SKILLS_CHOICE = constants.SKILLS_CHOICE
     name = models.CharField('기술스택', choices=SKILLS_CHOICE, max_length=20)
-        
+    
+    def __str__(self):
+        return f"{self.pk}. {self.name}"
+    
     class Meta:
         db_table = "SKILLS"
 
@@ -53,6 +62,7 @@ class User(AbstractBaseUser):
     password = models.CharField("비밀번호", max_length=300)
     username = models.CharField("이름", max_length=30, null=False, blank=False)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
+    last_login = models.DateTimeField("최종로그인", auto_now=True)
 
     is_active = models.BooleanField(default=True) # 계정활성화 여부
     is_admin = models.BooleanField(default=False) # 관리자 계정 여부
@@ -63,7 +73,7 @@ class User(AbstractBaseUser):
     objects = UserManager() # custom user 생성 시 필요
 
     def __str__(self):
-        return f"{self.username} 의 가입정보"
+        return f"{self.username}의 기본정보"
 
     # 로그인 사용자의 특정 테이블의 crud 권한을 설정, perm table의 crud 권한이 들어간다.
     # admin일 경우 항상 True, 비활성 사용자(is_active=False)의 경우 항상 False
@@ -93,7 +103,7 @@ class UserProfile(models.Model):
     region = models.ForeignKey(Region, verbose_name="활동지역", on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}의 프로필"
 
     class Meta:
         db_table = "USERPROFILE"
