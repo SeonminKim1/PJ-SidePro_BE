@@ -6,22 +6,15 @@ from rest_framework import status
 from django.db import transaction
 from django.db.models import Q
 
-from user.models import User
+from user.models import User, Skills
 from chat.models import Room, Status, Chat
 from chat import constants
 
 from .serializers import ChatRoomUserlistSerializer, ChatRoomMessagesSerializer
+
 from _utils.query_utils import query_debugger # Query Debugger
 from datetime import datetime
 import uuid
-
-# chat/user/?user_id=4
-class LoginUserInfoView(APIView):
-    @query_debugger
-    def get(self, request):
-        # request.user
-        # login_user_id = request.query_params.get('user_id')
-        return Response({"login_username": request.user.username}, status=status.HTTP_200_OK)
 
 # chat/rooms/?user_id=4
 class ChatRoomUserlistView(APIView):

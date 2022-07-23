@@ -72,3 +72,10 @@ class UserJoinSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+from .models import Skills
+
+class SkillsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skills
+        fields = "__all__"
