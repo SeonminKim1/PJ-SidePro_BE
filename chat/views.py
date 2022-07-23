@@ -55,9 +55,9 @@ class ChatRoomView(APIView):
             room = Room.objects.get(Q(user1 = user1, user2 = user2) | Q(user1 = user2 , user2 = user1))# name=roomname
             roomname = str(room.name)
             # Room의 현재 상태가 Pending 일 경우 Status Update X
-            if str(room.status.status) == constants.ROOM_STATUS_PENDING:
+            if str(room.status) == constants.ROOM_STATUS_PENDING:
                 # 대화 재요청 => room 나간 사람이 요청
-                if room.status.status_update_user.username == user1_username:
+                if room.status_update_user.username == user1_username:
                     Room.objects.filter(id=room.id)\
                                 .update(status=room_status, status_update_user = user1,
                                         lasted_time=datetime.now())
