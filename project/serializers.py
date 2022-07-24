@@ -2,6 +2,11 @@ from rest_framework import serializers
 from .models import Project as ProjectModel
 from .models import Comment as CommentModel
 
+class BaseCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentModel
+        fields = "__all__"
+
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
