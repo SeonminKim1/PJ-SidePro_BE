@@ -63,7 +63,7 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
     
     # 게시글 쓰기
     def post(self, request):
-        request.data["user"] = 2
+        request.data["user"] = int(request.user.id)
         project_serializer = ProjectSerializer(data=request.data)
         project_serializer.is_valid(raise_exception=True)
         project_serializer.save()
@@ -94,7 +94,7 @@ class ProjectDetailAPIView(APIView):
 class CommentAPIView(APIView):
     # 댓글 작성
     def post(self, request, project_id):
-        request.data["user"] = 2
+        request.data["user"] = request.user.id
         request.data["project"] = project_id
         serializer = CommentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

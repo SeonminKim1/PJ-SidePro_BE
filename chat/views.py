@@ -6,22 +6,15 @@ from rest_framework import status
 from django.db import transaction
 from django.db.models import Q
 
-from user.models import User
+from user.models import User, Skills
 from chat.models import Room, Status, Chat
 from chat import constants
 
 from .serializers import ChatRoomUserlistSerializer, ChatRoomMessagesSerializer
+
 from _utils.query_utils import query_debugger # Query Debugger
 from datetime import datetime
 import uuid
-
-# chat/user/?user_id=4
-class LoginUserInfoView(APIView):
-    @query_debugger
-    def get(self, request):
-        # request.user
-        # login_user_id = request.query_params.get('user_id')
-        return Response({"login_username": request.user.username}, status=status.HTTP_200_OK)
 
 # chat/rooms/?user_id=4
 class ChatRoomUserlistView(APIView):
@@ -55,9 +48,9 @@ class ChatRoomView(APIView):
             room = Room.objects.get(Q(user1 = user1, user2 = user2) | Q(user1 = user2 , user2 = user1))# name=roomname
             roomname = str(room.name)
             # Room의 현재 상태가 Pending 일 경우 Status Update X
-            if str(room.status.status) == constants.ROOM_STATUS_PENDING:
+            if str(room.status) == constants.ROOM_STATUS_PENDING:
                 # 대화 재요청 => room 나간 사람이 요청
-                if room.status.status_update_user.username == user1_username:
+                if room.status_update_user.username == user1_username:
                     Room.objects.filter(id=room.id)\
                                 .update(status=room_status, status_update_user = user1,
                                         lasted_time=datetime.now())
