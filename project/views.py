@@ -1,3 +1,4 @@
+from distutils.log import debug
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -9,7 +10,8 @@ from .serializers import (CommentSerializer,
                           ProjectSerializer, 
                           ProjectDetailSerializer, 
                           ProjectViewSerializer, 
-                          ProjectDetailViewSerializer)
+                          ProjectDetailViewSerializer,
+                          BaseCommentSerializer)
 
 # S3 업로드 관련
 import boto3
@@ -98,10 +100,15 @@ class CommentAPIView(APIView):
         data = request.data.copy()
         data["user"] = request.user.id
         data["project"] = project_id
-        serializer = CommentSerializer(data=data)
+        serializer = BaseCommentSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response (serializer.data, status=status.HTTP_200_OK)
+        
+        # user 필드를 username으로 return 
+        comment_serialize_data = serializer.data.copy()
+        comment_serialize_data['user'] = request.user.username
+
+        return Response ({'msg':'댓글 등록 성공', 'data':comment_serialize_data}, status=status.HTTP_200_OK)
 
 # project/<projcet_id>/comment/<comment_id>
 class CommentModifyAPIView(APIView):
@@ -111,7 +118,7 @@ class CommentModifyAPIView(APIView):
         serializer = CommentSerializer(comment, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'msg':'댓글 수정 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
     
     # 댓글 삭제
     def delete(self, request, project_id, comment_id):
