@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from user.models import User, UserProfile
+from user.models import User, UserProfile, Skills
 from .models import Chat, Room, Status
 
 # 채팅 가능 Userlist Return Serializrs
