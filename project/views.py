@@ -95,9 +95,10 @@ class ProjectDetailAPIView(APIView):
 class CommentAPIView(APIView):
     # 댓글 작성
     def post(self, request, project_id):
-        request.data["user"] = request.user.id
-        request.data["project"] = project_id
-        serializer = CommentSerializer(data=request.data)
+        data = request.data.copy()
+        data["user"] = request.user.id
+        data["project"] = project_id
+        serializer = CommentSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response (serializer.data, status=status.HTTP_200_OK)
