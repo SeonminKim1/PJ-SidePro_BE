@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from .models import Skills
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
+from .serializers import SkillsSerializer
 
 from project.models import Project as ProjectModel
 from project.serializers import ProjectViewSerializer
@@ -113,3 +115,20 @@ class MyBookmarkProjectView(APIView):
         project = ProjectModel.objects.filter(bookmark=request.user.pk)
         project_serializer = ProjectViewSerializer(project, many=True)
         return Response(project_serializer.data, status=status.HTTP_200_OK)
+
+
+# utils - QueryDebugger
+from _utils.query_utils import query_debugger # Query Debugger
+
+# project/user/
+class GetBaseInfoView(APIView):
+    @query_debugger
+    def get(self, request):
+        skills = Skills.objects.all()
+        skills_data = SkillsSerializer(skills, many=True).data
+        # user.username과
+        # 
+        # request.user
+        # login_user_id = request.query_params.get('user_id')
+        return Response({"login_username": request.user.username, "skills":skills_data}, status=status.HTTP_200_OK)
+
