@@ -120,7 +120,13 @@ class MyBookmarkProjectView(APIView):
 # utils - QueryDebugger
 from _utils.query_utils import query_debugger # Query Debugger
 
-# project/user/
+# user/info/
+class GetLoginUserInfoView(APIView):
+    @query_debugger
+    def get(self, request):
+        return Response({"login_username": request.user.username}, status=status.HTTP_200_OK)
+
+# user/main/init/
 class GetBaseInfoView(APIView):
     @query_debugger
     def get(self, request):
