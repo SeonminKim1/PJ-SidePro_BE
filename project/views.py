@@ -124,7 +124,7 @@ class BookmarkAPIView(APIView):
         bookmark = project.bookmark.all()
         if request.user in bookmark:
             project.bookmark.remove(request.user)
-            return Response({"msg:": "북마크 해제 완료!"})
+            return Response({"msg": "북마크 해제 완료!"})
         else:
             project.bookmark.add(request.user)        
         return Response({"msg": "북마크 등록 완료!"})
