@@ -67,6 +67,15 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
     def post(self, request):
         data = request.data.copy()
         data["user"] = request.user.id
+        skills_name = request.data["skills"].split(',')
+        print(skills_name)
+        select_skills = []
+        skills = {}
+        for skill in skills_name:
+            skills["name"] = (Skills.objects.get(name=skill).id)
+            select_skills.append(skills)
+        print(select_skills)
+        data["skills"] = select_skills
         project_serializer = ProjectSerializer(data=data)
         project_serializer.is_valid(raise_exception=True)
         project_serializer.save()
