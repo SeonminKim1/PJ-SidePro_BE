@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import Skills
+from .models import MeetTime, Region, Skills
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
@@ -11,6 +11,7 @@ from .serializers import SkillsSerializer
 
 from project.models import Project as ProjectModel
 from project.serializers import ProjectViewSerializer
+from django.utils import timezone
 # S3 업로드 관련
 import boto3
 import my_settings
@@ -20,8 +21,8 @@ import my_settings
 class UploadS3(APIView):
     # S3에 이미지 업로드 후 URL 리턴
     def post(self, request):
+        print(request)
         file = request.data["file"]
-        print(file)
         
         s3 = boto3.client('s3',
                           aws_access_key_id = my_settings.AWS_ACCESS_KEY,
@@ -31,16 +32,18 @@ class UploadS3(APIView):
         
         file_name = str(file).split('.')[0]
         file_extension = str(file).split('.')[1]
-        
+        file_name = f"{file_name}_{timezone.now().strftime('%Y-%m-%d_%H:%M:%S')}"
+
         s3.put_object(
             ACL="public-read",
-            Bucket="toastuitestbucket",
+            Bucket = my_settings.AWS_BUCKET_NAME,
             Body=file,
-            Key=file_name,
+            Key='user-imgs/' + file_name + '.' + file_extension,
             ContentType=file.content_type
             )
-        url =  "https://toastuitestbucket.s3.ap-northeast-2.amazonaws.com/"+ file_name + '.' + file_extension
-        return Response({"success":"업로드 성공!", "url": url})
+        
+        url =  "https://" + my_settings.AWS_BUCKET_NAME + ".s3.ap-northeast-2.amazonaws.com/"+ 'user-imgs/' + file_name + '.' + file_extension        
+        return Response({"success":"S3 업로드 성공!", "url": url})
 
 
 # user/join/
@@ -65,6 +68,15 @@ class UserAPIView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    # 유저프로필 등록
+    def post(self, request):
+        data = request.data.copy()
+        data["user"] = request.user.id
+        serializer = UserProfileDetailSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
     # 로그인한 유저프로필 수정
     def put(self, request):
         user = UserProfileModel.objects.get(user_id=request.user.id)
@@ -76,7 +88,7 @@ class UserAPIView(APIView):
     # 유저 탈퇴
     def delete(self, request):
         UserModel.objects.get(id=request.user.pk).delete()
-        return Response({"success": "탈퇴되었습니다!"}, status=status.HTTP_200_OK)
+        return Response({"msg": "탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.\n더 좋은 서비스로 찾아뵙겠습니다."}, status=status.HTTP_200_OK)
 
 
 
@@ -132,9 +144,4 @@ class GetBaseInfoView(APIView):
     def get(self, request):
         skills = Skills.objects.all()
         skills_data = SkillsSerializer(skills, many=True).data
-        # user.username과
-        # 
-        # request.user
-        # login_user_id = request.query_params.get('user_id')
         return Response({"login_username": request.user.username, "skills":skills_data}, status=status.HTTP_200_OK)
-
