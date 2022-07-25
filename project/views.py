@@ -13,6 +13,8 @@ from .serializers import (CommentSerializer,
                           ProjectDetailViewSerializer,
                           BaseCommentSerializer)
 
+from django.db.models import Count
+
 # S3 업로드 관련
 import boto3
 import my_settings
@@ -48,19 +50,33 @@ class UploadS3(APIView):
 class ProjectAPIView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
     
+    def pagination(self, project):
+            page = self.paginate_queryset(project) # page_size, page에 따른 pagination 처리된 결과값
+            # 페이징 처리가 된 결과가 반환되었을 경우
+            if page is not None:
+                # 페이징 처리된 결과를 serializer에 담아서 결과 값 가공
+                project_serializer = self.get_paginated_response(ProjectViewSerializer(page, many=True).data)
+            # 페이징 처리 필요 없는 경우
+            else:
+                project_serializer = ProjectViewSerializer(project, many=True)
+                
+            return Response(project_serializer.data, status=status.HTTP_200_OK)
+    
     # 모든 게시물 출력
     def get(self, request):
-        project = Project.objects.all()
-        page = self.paginate_queryset(project) # page_size, page에 따른 pagination 처리된 결과값
-        # 페이징 처리가 된 결과가 반환되었을 경우
-        if page is not None:
-            # 페이징 처리된 결과를 serializer에 담아서 결과 값 가공
-            project_serializer = self.get_paginated_response(ProjectViewSerializer(page, many=True).data)
-        # 페이징 처리 필요 없는 경우
+        filter = request.GET.get("filter", None)
+        if filter == "views":
+            project = Project.objects.all().order_by('-count')
+            return self.pagination(project)
+        elif filter == "newest":
+            project = Project.objects.all().order_by('-created_date')
+            return self.pagination(project)
+        elif filter == "popular":
+            project = Project.objects.all().annotate(q_count=Count('bookmark')).order_by('-q_count')                                 
+            return self.pagination(project)
         else:
-            project_serializer = ProjectViewSerializer(project, many=True)
-            
-        return Response(project_serializer.data, status=status.HTTP_200_OK)
+            project = Project.objects.all()
+            return self.pagination(project)
             
     
     # 게시글 쓰기
