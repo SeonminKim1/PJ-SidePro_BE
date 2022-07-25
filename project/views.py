@@ -37,11 +37,11 @@ class UploadS3(APIView):
         
         s3.put_object(
         ACL="public-read",
-        Bucket="toastuitestbucket",
+        Bucket = my_settings.AWS_BUCKET_NAME,
         Body=file,
-        Key=file_name,
+        Key='project-imgs/' + file_name + '.' + file_extension,
         ContentType=file.content_type)
-        url =  "https://toastuitestbucket.s3.ap-northeast-2.amazonaws.com/"+ file_name + '.' + file_extension
+        url =  "https://" + my_settings.AWS_BUCKET_NAME + ".s3.ap-northeast-2.amazonaws.com/"+ 'project-imgs/' + file_name + '.' + file_extension
         return Response({"success":"업로드 성공!", "url": url})
 
 # project/
