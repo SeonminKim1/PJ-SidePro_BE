@@ -1,23 +1,10 @@
 from rest_framework import serializers
 
-from user.models import User, UserProfile, Skills
-from .models import Chat, Room, Status
+from user.models import User, UserProfile
+from .models import Chat, Room
 
-# 채팅 가능 Userlist Return Serializrs
+# 채팅 가능 Userlist Return Serializrs - 1 Userprofile
 class UserProfileSerializer(serializers.ModelSerializer):
-    # skills = serializers.SerializerMethodField()
-    # meet_time = serializers.SerializerMethodField()
-    # region = serializers.SerializerMethodField()
-
-    # def get_skills(self, obj):
-    #     return [skills.name for skills in obj.skills.all()][:3]
-    
-    # def get_meet_time(self, obj):
-    #     return obj.meet_time.time_type
-    
-    # def get_region(self, obj):
-    #     return obj.region.name
-    
     class Meta:
         model = UserProfile
         fields = [
@@ -25,10 +12,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "github_url",
         ]
 
-
+# 채팅 가능 Userlist Return Serializr - 2 User + Userprofile
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
-    # last_mesaage 필요
     class Meta:
         model = User
         fields = [
@@ -37,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
             "userprofile",
         ]
 
+# 채팅 가능 Userlist Return Serializrs - 3 Room + User + Userprofile
 class ChatRoomUserlistSerializer(serializers.ModelSerializer):
     user1 = UserSerializer()
     user2 = UserSerializer()
@@ -58,7 +45,7 @@ class ChatRoomUserlistSerializer(serializers.ModelSerializer):
             "lasted_message",
         ]
 
-# 채팅 내역 Return Serilaizers
+# 채팅 내역 Return Serilaizers - 1 Chat
 class ChatMessagesSerializer(serializers.ModelSerializer):
     send_user = serializers.SerializerMethodField()
     def get_send_user(self, obj):
@@ -78,6 +65,7 @@ class ChatMessagesSerializer(serializers.ModelSerializer):
             "message",
         ]
 
+# 채팅 내역 Return Serilaizers - 2 Room + Chat
 class ChatRoomMessagesSerializer(serializers.ModelSerializer):
     user1 = serializers.SerializerMethodField()
     def get_user1(self, obj):
