@@ -9,7 +9,7 @@ class Project(models.Model):
     title = models.CharField("제목", max_length=50)
     description = models.CharField("한줄 설명", max_length=60)
     skills = models.ManyToManyField(Skills, verbose_name="기술스택")
-    thumnail_img_path = models.TextField("썸네일")
+    thumnail_img_path = models.TextField("썸네일", null=True, blank=True)
     content = models.TextField("글내용")
     count = models.PositiveIntegerField("조회수", default=0)
     github_url = models.URLField("레포지토리주소")
