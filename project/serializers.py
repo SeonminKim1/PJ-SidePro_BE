@@ -45,10 +45,13 @@ class ProjectDetailViewSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectModel
-        fields = "__all__"               
+        fields = "__all__"              
 
                     
 class ProjectViewSerializer(serializers.ModelSerializer):
+    
+    comment = CommentSerializer(many=True, source="comment_set")
+    
     skills = serializers.SerializerMethodField()
     def get_skills(self, obj):
         return [skills.name for skills in obj.skills.all()]
@@ -59,5 +62,22 @@ class ProjectViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProjectModel
-        fields = "__all__"           
+        fields = ["user", "title", "description",
+                  "skills", "thumnail_img_path",
+                  "content", "count", "github_url",
+                  "created_date", "updated_date", 
+                  "bookmark","comment", ]        
+        
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         

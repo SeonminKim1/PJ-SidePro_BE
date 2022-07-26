@@ -7,6 +7,7 @@ from user.models import User, Skills
 class Project(models.Model):
     user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
     title = models.CharField("제목", max_length=50)
+    description = models.CharField("한줄 설명", max_length=60)
     skills = models.ManyToManyField(Skills, verbose_name="기술스택")
     thumnail_img_path = models.TextField("썸네일")
     content = models.TextField("글내용")
