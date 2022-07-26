@@ -19,7 +19,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     comment = CommentSerializer(many=True, source="comment_set")
     class Meta:
         model = ProjectModel
-        fields = ["user", "title", "skills",
+        fields = ["id", "user", "title", "skills","description",
                   "thumnail_img_path", "content",
                   "count", "github_url", 
                   "created_date", "updated_date","comment"]
@@ -37,7 +37,7 @@ class ProjectDetailViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProjectModel
-        fields = ["id","user", "title", "skills",
+        fields = ["id","user", "title", "skills", "description",
                   "thumnail_img_path", "content",
                   "count", "github_url", 
                   "created_date", "updated_date","comment", "bookmark"]
