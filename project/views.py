@@ -1,7 +1,14 @@
-from distutils.log import debug
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
+
+# 쿠키 설정에 사용될 시간 관련 라이브러리
+import datetime
+from django.utils import timezone
+
+# 트랜잭션
+from django.db import transaction
+
 
 from user.models import Skills
 
@@ -103,6 +110,10 @@ class ProjectDetailAPIView(APIView):
     # 게시물 하나 자세히 보기
     def get(self, request, project_id):
         project = Project.objects.get(id=project_id)
+        # 조회수 증가
+        project.count += 1
+        project.save()        
+        
         serializer = ProjectDetailViewSerializer(project)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

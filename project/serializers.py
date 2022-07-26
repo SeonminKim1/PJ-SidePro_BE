@@ -62,7 +62,7 @@ class ProjectViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProjectModel
-        fields = ["user", "title", "description",
+        fields = ["id","user", "title", "description",
                   "skills", "thumnail_img_path",
                   "content", "count", "github_url",
                   "created_date", "updated_date", 
