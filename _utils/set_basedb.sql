@@ -28,7 +28,7 @@ INSERT INTO public."MEETTIME"(id, time_type)
 	VALUES 
     (1, '주중 선호'),
     (2, '주말 선호'),
-    (3, '상관없음');
+    (3, '상관 없음');
 
 
 INSERT INTO public."SKILLS"(id, name)
@@ -52,7 +52,7 @@ INSERT INTO public."SKILLS"(id, name)
     ( 17,'CSS'),
     ( 18,'CSS3'),
     ( 19,'CentOS'),
-    ( 20,'C언어'),
+    ( 20,'C'),
     ( 21,'Delphi'),
     ( 22,'Directx'),
     ( 23,'Django'),
