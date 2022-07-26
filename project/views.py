@@ -2,13 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
-# 쿠키 설정에 사용될 시간 관련 라이브러리
-import datetime
-from django.utils import timezone
-
-# 트랜잭션
-from django.db import transaction
-
+from django.db.models import Q
 
 from user.models import Skills
 
@@ -53,6 +47,7 @@ class UploadS3(APIView):
         url =  "https://" + my_settings.AWS_BUCKET_NAME + ".s3.ap-northeast-2.amazonaws.com/"+ 'project-imgs/' + file_name + '.' + file_extension
         return Response({"success":"업로드 성공!", "url": url})
 
+
 # project/
 class ProjectAPIView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
@@ -72,6 +67,14 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
     # 모든 게시물 출력
     def get(self, request):
         filter = request.GET.get("filter", None)
+        skills = request.GET.getlist("skills", None)
+        print(skills)
+        if skills != None:
+            q = Q()
+            for skill in skills:
+                q.add(Q(skills__name=skill), q.OR)
+                project = Project.objects.filter(q)
+                return self.pagination(project)
         if filter == "views":
             project = Project.objects.all().order_by('-count')
             return self.pagination(project)
@@ -84,6 +87,8 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
         else:
             project = Project.objects.all()
             return self.pagination(project)
+        
+
             
     
     # 게시글 쓰기
