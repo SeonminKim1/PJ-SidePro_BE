@@ -22,7 +22,7 @@ INSERT INTO public."REGION"(id, name)
     (14, '전라남도'),
     (15, '경상북도'),
     (16, '경상남도'),
-    (17, '제주특별자치도'),
+    (17, '제주특별자치도');
 
 INSERT INTO public."MEETTIME"(id, time_type)
 	VALUES 
