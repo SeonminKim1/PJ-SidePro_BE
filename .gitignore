@@ -4,3 +4,6 @@ migrations/
 venv/
 db.sqlite3
 my_settings.py
+Lib/
+Scripts/
+pyvenv.cfg
