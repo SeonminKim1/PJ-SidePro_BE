@@ -96,7 +96,7 @@ class User(AbstractBaseUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name="유저",on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField("자기소개", null=True, blank=True)
-    profile_image = models.TextField("프로필사진", null=True, blank=True)
+    profile_image = models.TextField("프로필사진", null=True, blank=True, max_length=1000)
     github_url = models.URLField(verbose_name = "GITHUB URL", null=True, blank=True)
     skills = models.ManyToManyField(Skills, verbose_name='기술 스택')
     meet_time = models.ForeignKey(MeetTime, verbose_name="가능시간", on_delete=models.CASCADE, null=True, blank=True)
