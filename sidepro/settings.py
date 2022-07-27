@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user',
     'project',
     'chat',
+    'recommand',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders'
