@@ -21,4 +21,5 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('project/', include('project.urls')),
     path('chat/', include('chat.urls')),
+    path('recommend/', include('recommand.urls'))
 ]
