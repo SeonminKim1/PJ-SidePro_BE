@@ -35,7 +35,6 @@ class UploadS3(APIView):
                           aws_secret_access_key = my_settings.AWS_SECRET_KEY,
                           region_name = my_settings.REGION_NAME,
                           )
-        
         file_name = str(file).split('.')[0]
         file_extension = str(file).split('.')[1]
         file_name = f"{file_name}_{timezone.now().strftime('%Y-%m-%d_%H:%M:%S')}"
