@@ -23,21 +23,23 @@ class RecommendView(APIView):
 
         # 3. 코사인 유사도 구하기 + 가장 높은 User 2~5명의 Project 전부 출력
         user_id_list, jaccard_score_dict = user_based.get_jaccard_score_user_id_list(base_df, request.user.id)
-        print(user_id_list, jaccard_score_dict)
+        # print(user_id_list, jaccard_score_dict)
+
         # 4. 최종 user들의 project 가져오기
         project_querysets = Project.objects.filter(user__in = user_id_list)
         project_querysets_list = list(project_querysets)
 
+        # 5. User들의 Project 중 랜덤 추출
         if len(project_querysets_list) >=3:
             project_querysets_random3_list = random.sample(project_querysets_list, 3)
-            print('1', project_querysets_random3_list)
+            # print('1', project_querysets_random3_list)
         else:
             project_querysets = Project.objects.exclude(user__in = request.user.id)
             project_querysets_list = list(project_querysets)
             project_querysets_random3_list = random.sample(project_querysets_list, 3)
-            print('2', project_querysets_random3_list)
+            # print('2', project_querysets_random3_list)
 
-        # 5. Serializers 결과를 가져옴.
+        # 6. Serializers 결과 조회.
         rec_result_projects_data = RecommendProjectsSerializer(project_querysets_random3_list, many=True).data
 
         return Response({'results':rec_result_projects_data, 'scores':jaccard_score_dict}, status=status.HTTP_200_OK)
