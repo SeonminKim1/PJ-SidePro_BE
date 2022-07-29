@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import MeetTime, Region, Skills
+from .models import MeetTime, Region, Skills, UserProfile
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer

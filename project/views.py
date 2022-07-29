@@ -70,42 +70,32 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
         filter = request.GET.get("filter", None)
         skills = request.GET.getlist("skills", None)
         print(skills)
+        # 검색
         if skills != None:
             q = Q()
             for skill in skills:
                 q.add(Q(skills__name=skill), q.OR)
                 project = Project.objects.filter(q)
                 return self.pagination(project)
+        # 필터링
         if filter == "views":
-            project = Project.objects.all().order_by('-count')
+            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-count')
             return self.pagination(project)
         elif filter == "newest":
-            project = Project.objects.all().order_by('-created_date')
+            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-created_date')
             return self.pagination(project)
         elif filter == "popular":
-            project = Project.objects.all().annotate(q_count=Count('bookmark')).order_by('-q_count')                                 
+            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().annotate(q_count=Count('bookmark')).order_by('-q_count')                                 
             return self.pagination(project)
         else:
-            project = Project.objects.all()
+            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all()
+            # project = Project.objects.all()
             return self.pagination(project)
         
-
-            
-    
     # 게시글 쓰기
     def post(self, request):
         data = request.data.copy()
         data["user"] = request.user.id
-        print(data, type(data))
-        # skills_name = request.data["skills"].split(',')
-        # print(skills_name)
-        # select_skills = []
-        # skills = {}
-        # for skill in skills_name:
-        #     skills["name"] = (Skills.objects.get(name=skill).id)
-        #     select_skills.append(skills)
-        # print(select_skills)
-        # data["skills"] = select_skills
         project_serializer = ProjectSerializer(data=data)
         project_serializer.is_valid(raise_exception=True)
         project_serializer.save()
@@ -115,7 +105,7 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
 class ProjectDetailAPIView(APIView):
     # 게시물 하나 자세히 보기
     def get(self, request, project_id):
-        project = Project.objects.get(id=project_id)
+        project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").prefetch_related("comment_set").get(id=project_id)
         # 조회수 증가
         project.count += 1
         project.save()        

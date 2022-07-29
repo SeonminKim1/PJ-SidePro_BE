@@ -1,5 +1,6 @@
 # project(app)/models.py
 from django.db import models
+from django.urls import reverse
 from user.models import User, Skills
 
 
@@ -20,6 +21,10 @@ class Project(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("project_detail_view", kwargs={"project_id": self.pk})
+    
     
     class Meta:
         db_table = "PROJECT"
