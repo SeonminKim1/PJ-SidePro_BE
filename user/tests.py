@@ -3,6 +3,9 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from .models import User
 
+from django.test.utils import CaptureQueriesContext
+from django.db import connection
+
 # 회원가입 테스트
 class UserRegistrationTest(APITestCase):
     # 모든 테스트 시작 전 호출되는 함수
@@ -51,14 +54,17 @@ class LoginUserTest(APITestCase):
         
     # 정상 로그인
     def test_login(self):
-        response = self.client.post(reverse("token_obtain_pair"), self.data)
-        # print(response.data["access"])
-        self.assertEqual(response.status_code, 200)
+        with CaptureQueriesContext(connection) as ctx:
+            response = self.client.post(reverse("token_obtain_pair"), self.data)
+            # print(response.data["access"])
+            self.assertEqual(response.status_code, 200)
+            print("로그인 성공 쿼리", ctx.captured_queries)
     
     # 패스워드 없을 경우
     def test_login_miss_pwd(self):
-        response = self.client.post(reverse("token_obtain_pair"), self.data_none_pwd)
-        self.assertEqual(response.status_code, 400)
+        with CaptureQueriesContext(connection) as ctx:
+            response = self.client.post(reverse("token_obtain_pair"), self.data_none_pwd)
+            self.assertEqual(response.status_code, 400)
         
     # 아이디 없을 경우
     def test_login_miss_email(self):
@@ -67,12 +73,15 @@ class LoginUserTest(APITestCase):
         
     # 유저 정보 확인
     def test_get_user_data(self):
-        # 액세스 토큰을 받아와서 HTTP_AUTHORIZATION에 주는 것이 중요!
-        access_token = self.client.post(reverse("token_obtain_pair"), self.data).data['access']
-        response = self.client.get(
-            path=reverse("user_view"),
-            HTTP_AUTHORIZATION = f"Bearer {access_token}"
-        )
-        print(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['email'], self.data['email'])
+        with CaptureQueriesContext(connection) as ctx:
+            # 액세스 토큰을 받아와서 HTTP_AUTHORIZATION에 주는 것이 중요!
+            access_token = self.client.post(reverse("token_obtain_pair"), self.data).data['access']
+            response = self.client.get(
+                path=reverse("user_view"),
+                HTTP_AUTHORIZATION = f"Bearer {access_token}"
+            )
+            print(response.data)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.data['email'], self.data['email'])
+            print("유저 확인 쿼리", ctx.captured_queries)
+    
