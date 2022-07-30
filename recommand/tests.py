@@ -14,7 +14,7 @@ from project.models import Project
 from user.constants import SKILLS_CHOICE, REGION_CHOICE, TIME_CHOICE
 import json
 
-class ProjectReadTest(APITestCase):
+class ProjectRecommendReadTest(APITestCase):
     @classmethod
     def setUpTestData(self):
         self.data = {"email": "test@mail.com", "password":"test"}
