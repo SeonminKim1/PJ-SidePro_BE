@@ -18,6 +18,8 @@ class Project(models.Model):
     updated_date = models.DateTimeField("수정날짜", auto_now=True)
     
     bookmark = models.ManyToManyField(User, related_name="bookmarks", blank=True)
+    bookmark_count = models.PositiveBigIntegerField("북마크 수", default=0)
+    comment_count = models.PositiveBigIntegerField("댓글 수", default=0)
     
     def __str__(self):
         return self.title
@@ -25,9 +27,12 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse("project_detail_view", kwargs={"project_id": self.pk})
     
+    def get_bookmark_url(self):
+        return reverse("bookmark", kwargs={"project_id": self.pk})
     
     class Meta:
         db_table = "PROJECT"
+
 
 # 댓글
 class Comment(models.Model):

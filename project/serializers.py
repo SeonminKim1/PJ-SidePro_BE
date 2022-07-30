@@ -66,7 +66,7 @@ class ProjectViewSerializer(serializers.ModelSerializer):
                   "skills", "thumnail_img_path",
                   "content", "count", "github_url",
                   "created_date", "updated_date", 
-                  "bookmark","comment", ]        
+                  "bookmark","bookmark_count","comment","comment_count" ]        
         
         
 
