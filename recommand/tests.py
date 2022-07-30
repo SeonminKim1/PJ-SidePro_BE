@@ -19,18 +19,22 @@ class ProjectReadTest(APITestCase):
     def setUpTestData(self):
         self.data = {"email": "test@mail.com", "password":"test"}
         self.faker = Faker()
-        self.user_num = 101 # 100
+        self.user_num = 100 # 100
         self.project_num = 10
         # self.projects = []
-        self.userprofile = []
+        # self.userprofile = []
+        # self.skills = Skills.objects.create(name = 'Python') # SKILLS 129
+        # self.meettime = MeetTime.objects.create(time_type = '상관 없음') # 3
+        # self.region = Region.objects.create(name = '서울특별시') # 17
+        # """
         for i in SKILLS_CHOICE:
             self.skills = Skills.objects.create(name = i[0]) # SKILLS 129
         for i in TIME_CHOICE:
             self.meettime = MeetTime.objects.create(time_type = i[0]) # 3
         for i in REGION_CHOICE:
             self.region = Region.objects.create(name = i[0]) # 17
-
-        for i in range(1, self.user_num):
+        # """
+        for i in range(1, self.user_num + 1):
             if i==1:
                 user = User.objects.create_user("test@mail.com", "test")
             else:
@@ -44,6 +48,8 @@ class ProjectReadTest(APITestCase):
                 meet_time = self.meettime,
                 region = self.region
             )
+            userprofile.skills.add(i)
+            
             for j in range(self.project_num):
                 proj = Project.objects.create(
                     user=user,
@@ -53,8 +59,9 @@ class ProjectReadTest(APITestCase):
                     content=self.faker.word(),
                     github_url="http://www.naver.com"
                 )
-                proj.bookmark.set("")
-                proj.skills.add(1)
+                proj.bookmark.set("") # 
+                for k in range(1, 21):
+                    proj.skills.add(k) # index 번호
                 # self.projects.append(proj)
             
     @query_debugger
