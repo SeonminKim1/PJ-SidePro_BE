@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/sidepro_be/static
+    ports:
+      - 80:80
+    depends_on:
+      - web
+  web:
+    build: .
+    command: gunicorn sidepro.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    working_dir: /sidepro_be/
+    volumes:
+      - ./:/sidepro_be/
+      - static_volume:/sidepro_be/static
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+  db:
+    image: postgres:14.4-alpine
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    env_file:
+      - ./.env.postgres
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_db:
+  static_volume:

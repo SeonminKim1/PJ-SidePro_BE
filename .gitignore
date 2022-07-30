@@ -7,3 +7,7 @@ my_settings.py
 Lib/
 Scripts/
 pyvenv.cfg
+.env
+.env.postgres
+.env.dev
+.env.postgres.dev

@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-import my_settings
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,12 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = my_settings.SECRET_KEY
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", 1))
 
-ALLOWED_HOSTS = []
+
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -84,7 +87,6 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'sidepro.urls'
 
-import os
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates') # myprojet/templates
 TEMPLATES = [
     {
@@ -111,7 +113,16 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 ## Default
 # =========== Setting Key by my_settings.py ===========
 # DATABASES = my_settings.MYSQL_DATABASE
-DATABASES = my_settings.POSTGRESQL_DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get("ENGINE"),
+        'NAME': os.environ.get("NAME"), # Schema Name
+        'USER': os.environ.get("USER"),
+        'PASSWORD': os.environ.get("PASSWORD"), # PASSWORD NAME
+        'HOST':os.environ.get("HOST"),
+        'PORT':os.environ.get("PORT"),
+    }
+}
 
 ### SQLITE DB 사용 희망시 아래 주석 풀어서 사용
 # """
@@ -158,7 +169,8 @@ USE_TZ = False  # 원래 True KOREA Time을 위한 False 설정
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
