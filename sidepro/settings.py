@@ -26,6 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", 1))
+# DEBUG = '1'
 
 
 if os.environ.get('ALLOWED_HOSTS'):
@@ -37,6 +38,7 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'channels',
 
     'django.contrib.admin',
@@ -52,7 +54,6 @@ INSTALLED_APPS = [
     'recommand',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders'
 ]
 
 ASGI_APPLICATION = 'sidepro.asgi.application'
