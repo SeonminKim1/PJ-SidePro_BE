@@ -1,3 +1,4 @@
+from attr import field
 from rest_framework import serializers
 from rest_pandas.serializers import PandasSerializer
 
@@ -9,18 +10,19 @@ class SkillsSerializer(serializers.ModelSerializer):
         model = Skills
         fields = "__all__"
         
-class UserSkillsSerializer(serializers.ModelSerializer):
+class UserProfileSkillsSerializer(serializers.ModelSerializer):
     skills = SkillsSerializer
     class Meta:
         model = UserProfile
         list_serializer_class = PandasSerializer
+        # fields = "__all__"
         fields = [
             "user",
             "skills",
         ]
 
 class UserSerializer(serializers.ModelSerializer):
-    userprofile = UserSkillsSerializer()
+    userprofile = UserProfileSkillsSerializer()
     
     class Meta:
         model = User

@@ -81,8 +81,7 @@ MIDDLEWARE = [
 
 # FE의 주소값을 입력해주어야한다.
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
+    "http://www.sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
 ]
 
 ROOT_URLCONF = 'sidepro.urls'
@@ -194,11 +193,6 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'user.User' # app.model
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-]
 
 # JWT 관련 세부 설정 (생략 가능)
 SIMPLE_JWT = {
