@@ -27,9 +27,7 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse("project_detail_view", kwargs={"project_id": self.pk})
     
-    def get_bookmark_url(self):
-        return reverse("bookmark", kwargs={"project_id": self.pk})
-    
+       
     class Meta:
         db_table = "PROJECT"
 
