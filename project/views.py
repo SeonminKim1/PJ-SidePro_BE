@@ -5,6 +5,8 @@ from rest_framework import permissions, status
 from django.db.models import Q
 from django.db.models import F
 
+from django.db import transaction
+
 from user.models import Skills
 
 from .models import Comment, Project
@@ -81,13 +83,13 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
                 return self.pagination(project)
         # 필터링
         if filter == "views":
-            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-count')
+            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-count')
             return self.pagination(project)
         elif filter == "newest":
-            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-created_date')
+            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-created_date')
             return self.pagination(project)
         elif filter == "popular":
-            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("bookmark").all().annotate(q_count=Count('bookmark')).order_by('-q_count')                                 
+            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-bookmark_count')                                 
             return self.pagination(project)
         else:
             project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all()
@@ -107,7 +109,8 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
 class ProjectDetailAPIView(APIView):
     # 게시물 하나 자세히 보기
     def get(self, request, project_id):
-        project = Project.objects.get(id=project_id)
+        project = Project.objects.prefetch_related("comment_set","skills","bookmark").get(id=project_id)
+        # project = Project.objects.get(id=project_id)
         # 조회수 증가
         project.count += 1
         project.save()        
@@ -117,7 +120,8 @@ class ProjectDetailAPIView(APIView):
     
     # 게시글 수정
     def put(self, request, project_id):
-        project = Project.objects.get(id=project_id)
+        project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("comment_set").prefetch_related("bookmark").get(id=project_id)
+        # project = Project.objects.get(id=project_id)
         serializer = ProjectDetailSerializer(project, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -131,6 +135,7 @@ class ProjectDetailAPIView(APIView):
 # project/<project_id>/comment/
 class CommentAPIView(APIView):
     # 댓글 작성
+    @transaction.atomic
     def post(self, request, project_id):
         data = request.data.copy()
         data["user"] = request.user.id
@@ -159,28 +164,30 @@ class CommentModifyAPIView(APIView):
         return Response({'msg':'댓글 수정 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
     
     # 댓글 삭제
+    @transaction.atomic
     def delete(self, request, project_id, comment_id):
-        Comment.objects.get(id=comment_id, project=project_id).delete()
         project = Project.objects.get(id=project_id)
         project.comment_count = F("comment_count") - 1
         project.save()
+        Comment.objects.get(id=comment_id, project=project_id).delete()
         return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
 
 # project/<int:project_id>/bookmark/
 class BookmarkAPIView(APIView):
     # 북마크 클릭 시
+    @transaction.atomic
     def post(self, request, project_id):
         project = Project.objects.get(id=project_id)
         bookmark = project.bookmark.all()
         if request.user in bookmark:
+            project.bookmark_count =  F('bookmark_count') - 1
             project.bookmark.remove(request.user)
             # project.bookmark_count -= 1
-            project.bookmark_count =  F('bookmark_count') - 1
             project.save()
             return Response({"msg": "북마크 해제 완료!"})
         else:
+            project.bookmark_count = F("bookmark_count") + 1
             project.bookmark.add(request.user)
             # project.bookmark_count += 1
-            project.bookmark_count = F("bookmark_count") + 1
             project.save()        
         return Response({"msg": "북마크 등록 완료!"})
