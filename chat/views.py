@@ -73,7 +73,6 @@ class ChatRoomView(APIView):
                         status=room_status, status_update_user = user1,
                         lasted_time=datetime.now(), lasted_message='')
             room.save()
-            print('6666666666666666666666')
             return Response({"message": "Room does not exist and was Created", "uuid_roomname":roomname}, status=status.HTTP_201_CREATED)
         return Response({"message": "Room is existed and Status Updated", "uuid_roomname":roomname}, status=status.HTTP_200_OK)
 
