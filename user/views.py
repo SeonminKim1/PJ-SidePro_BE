@@ -14,7 +14,7 @@ from project.serializers import ProjectViewSerializer
 from django.utils import timezone
 # S3 업로드 관련
 import boto3
-import my_settings
+import os
 
 
 # user/upload/
@@ -25,9 +25,9 @@ class UploadS3(APIView):
         file = request.data["file"]
         
         s3 = boto3.client('s3',
-                          aws_access_key_id = my_settings.AWS_ACCESS_KEY,
-                          aws_secret_access_key = my_settings.AWS_SECRET_KEY,
-                          region_name = my_settings.REGION_NAME,
+                          aws_access_key_id = os.environ.get("AWS_ACCESS_KEY"),
+                          aws_secret_access_key = os.environ.get("AWS_SECRET_KEY"),
+                          region_name = os.environ.get("REGION_NAME"),
                           )
         
         file_name = str(file).split('.')[0]
@@ -36,13 +36,13 @@ class UploadS3(APIView):
 
         s3.put_object(
             ACL="public-read",
-            Bucket = my_settings.AWS_BUCKET_NAME,
+            Bucket = os.environ.get("AWS_BUCKET_NAME"),
             Body=file,
             Key='user-imgs/' + file_name + '.' + file_extension,
             ContentType=file.content_type
             )
         
-        url =  "https://" + my_settings.AWS_BUCKET_NAME + ".s3.ap-northeast-2.amazonaws.com/"+ 'user-imgs/' + file_name + '.' + file_extension        
+        url =  "https://" + os.environ.get("AWS_BUCKET_NAME") + ".s3.ap-northeast-2.amazonaws.com/"+ 'user-imgs/' + file_name + '.' + file_extension        
         return Response({"success":"S3 업로드 성공!", "url": url})
 
 
