@@ -99,7 +99,8 @@ class AnotherUserAPIView(APIView):
     
     # 다른 유저 정보 보기
     def get(self, request, user_id):
-        user = UserModel.objects.get(id=user_id)
+        user = UserModel.objects.select_related("userprofile").get(id=user_id)
+        # user = UserModel.objects.get(id=user_id)
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
