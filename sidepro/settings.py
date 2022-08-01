@@ -25,8 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", 1))
-# DEBUG = '1'
+DEBUG = True
 
 
 if os.environ.get('ALLOWED_HOSTS'):
@@ -81,10 +80,16 @@ MIDDLEWARE = [
 ]
 
 # FE의 주소값을 입력해주어야한다.
-CORS_ALLOWED_ORIGINS = [
+if os.environ.get('IS_LOCAL') == True:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
     "http://sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
     "http://sidepro.shop",
-]
+    ]
 
 ROOT_URLCONF = 'sidepro.urls'
 
@@ -113,18 +118,42 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 
 ## Default
 # =========== Setting Key by my_settings.py ===========
-# DATABASES = my_settings.MYSQL_DATABASE
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get("ENGINE"),
-        'NAME': os.environ.get("NAME"), # Schema Name
-        'USER': os.environ.get("USER"),
-        'PASSWORD': os.environ.get("PASSWORD"), # PASSWORD NAME
-        'HOST':os.environ.get("HOST"),
-        'PORT':os.environ.get("PORT"),
-    }
-}
 
+
+if os.environ.get('IS_LOCAL') == True:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get("LOCAL_ENGINE"),
+            'NAME': os.environ.get("LOCAL_NAME"), # Schema Name
+            'USER': os.environ.get("LOCAL_USER"),
+            'PASSWORD': os.environ.get("LOCAL_PASSWORD"), # PASSWORD NAME
+            'HOST':os.environ.get("LOCAL_HOST"),
+            'PORT':os.environ.get("LOCAL_PORT"),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get("ENGINE"),
+            'NAME': os.environ.get("NAME"), # Schema Name
+            'USER': os.environ.get("USER"),
+            'PASSWORD': os.environ.get("PASSWORD"), # PASSWORD NAME
+            'HOST':os.environ.get("HOST"),
+            'PORT':os.environ.get("PORT"),
+        }
+    }
+
+# MYSQL_DATABASE
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get("MYSQL_ENGINE"),
+#         'NAME': os.environ.get("MYSQL_NAME"), # Schema Name
+#         'USER': os.environ.get("MYSQL_USER"),
+#         'PASSWORD': os.environ.get("MYSQL_PASSWORD"), # PASSWORD NAME
+#         'HOST':os.environ.get("MYSQL_HOST"),
+#         'PORT':os.environ.get("MYSQL_PORT"),
+#     }
+# }
 ### SQLITE DB 사용 희망시 아래 주석 풀어서 사용
 # """
 # DATABASES = {
