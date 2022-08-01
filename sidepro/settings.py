@@ -82,7 +82,8 @@ MIDDLEWARE = [
 
 # FE의 주소값을 입력해주어야한다.
 CORS_ALLOWED_ORIGINS = [
-    "http://www.sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
+    "http://sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
+    "http://sidepro.shop",
 ]
 
 ROOT_URLCONF = 'sidepro.urls'
