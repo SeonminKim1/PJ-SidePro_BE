@@ -12,12 +12,13 @@ def query_debugger(func):
         start = time.perf_counter()
         result = func(*args, **kwargs)
         end = time.perf_counter()
-
+        
         end_queries = len(connection.queries)
-
+        print(f"------------------------------------------------------")
         print(f"Function : {func.__name__}")
         print(f"Number of Queries : {end_queries - start_queries}")
         print(f"Finished in : {(end - start):.6f}s")
+        print(f"------------------------------------------------------")
         return result
 
     return inner_func

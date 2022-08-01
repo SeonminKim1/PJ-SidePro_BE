@@ -140,3 +140,7 @@ SKILLS_CHOICE = (
 ("iOS","iOS"),
 ("jQuery","jQuery"),
 )
+
+if __name__ == "__main__":
+        for i in SKILLS_CHOICE:
+                print(i[0])
