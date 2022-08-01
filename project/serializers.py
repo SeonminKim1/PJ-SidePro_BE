@@ -49,9 +49,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
                     
 class ProjectViewSerializer(serializers.ModelSerializer):
-    
-    comment = CommentSerializer(many=True, source="comment_set")
-    
+       
     skills = serializers.SerializerMethodField()
     def get_skills(self, obj):
         return [skills.name for skills in obj.skills.all()]
@@ -66,7 +64,7 @@ class ProjectViewSerializer(serializers.ModelSerializer):
                   "skills", "thumnail_img_path",
                   "content", "count", "github_url",
                   "created_date", "updated_date", 
-                  "bookmark","bookmark_count","comment","comment_count" ]        
+                  "bookmark_count","comment_count" ]        
         
         
 
