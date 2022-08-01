@@ -109,7 +109,7 @@ class ProjectDetailAPIView(APIView):
     def get(self, request, project_id):
         project = Project.objects.get(id=project_id)
         # 조회수 증가
-        project.count += 1
+        project.count = F("count") + 1
         project.save()        
         
         serializer = ProjectDetailViewSerializer(project)
