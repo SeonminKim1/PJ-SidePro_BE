@@ -14,10 +14,10 @@ from _utils.query_utils import query_debugger # Query Debugger
 
 # userprofile 업데이트 하면 추천 리스트 업데이트
 class RecommendView(APIView):
-    @query_debugger
+    # @query_debugger
     def get(self, request):
         # 최적화 전 Query 코드
-        optimize_query = 0
+        optimize_query = 1
         if optimize_query:
             # 1. 추천 시스템 최초 요청
             userinfo = UserProfile.objects.select_related('user').prefetch_related('skills').all()
@@ -45,7 +45,6 @@ class RecommendView(APIView):
 
             # 6. Serializers 결과 조회.
             rec_result_projects_data = RecommendProjectsSerializer(project_querysets_random3_list, many=True).data
-            return Response({'results':rec_result_projects_data, 'scores':jaccard_score_dict}, status=status.HTTP_200_OK)
 
         else:
             userinfo = UserProfile.objects.all()
@@ -61,5 +60,4 @@ class RecommendView(APIView):
                 project_querysets_list = list(project_querysets)
                 project_querysets_random3_list = random.sample(project_querysets_list, 3)
             rec_result_projects_data = RecommendProjectsSerializer(project_querysets_random3_list, many=True).data
-            return Response({}, status=status.HTTP_200_OK)
-    
+        return Response({'results':rec_result_projects_data, 'scores':jaccard_score_dict}, status=status.HTTP_200_OK)
