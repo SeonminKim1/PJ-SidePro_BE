@@ -27,12 +27,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-if os.environ.get('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
-else:
+# if os.environ.get('ALLOWED_HOSTS'):
+if os.environ.get('IS_LOCAL') == 'TRUE':
     ALLOWED_HOSTS = []
-
+else: # for Production
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
 # Application definition
 
@@ -80,7 +79,7 @@ MIDDLEWARE = [
 ]
 
 # FE의 주소값을 입력해주어야한다.
-if os.environ.get('IS_LOCAL') == True:
+if os.environ.get('IS_LOCAL') == 'TRUE':
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:5500",
         "http://127.0.0.1:5500",
@@ -119,8 +118,7 @@ WSGI_APPLICATION = 'sidepro.wsgi.application'
 ## Default
 # =========== Setting Key by my_settings.py ===========
 
-
-if os.environ.get('IS_LOCAL') == True:
+if os.environ.get('IS_LOCAL') == 'TRUE':
     DATABASES = {
         'default': {
             'ENGINE': os.environ.get("LOCAL_ENGINE"),
