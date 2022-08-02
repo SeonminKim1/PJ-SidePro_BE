@@ -18,7 +18,6 @@ import uuid
 
 # chat/rooms/?user_id=4
 class ChatRoomUserlistView(APIView):
-    # @query_debugger
     def get(self, request):
         optimize_query = 1 
         if optimize_query: # Query 최적화 O
@@ -37,7 +36,6 @@ class ChatRoomUserlistView(APIView):
 # chat/rooms/<str:roomname>/
 # ROOM 생성, 삭제 관련
 class ChatRoomView(APIView):
-    # @query_debugger
     @transaction.atomic() 
     def post(self, request, roomname): # room 생성
         user1_username = request.POST.get('user1') # requset.user
@@ -76,7 +74,6 @@ class ChatRoomView(APIView):
             return Response({"message": "Room does not exist and was Created", "uuid_roomname":roomname}, status=status.HTTP_201_CREATED)
         return Response({"message": "Room is existed and Status Updated", "uuid_roomname":roomname}, status=status.HTTP_200_OK)
 
-    # @query_debugger
     @transaction.atomic() # room 삭제
     def delete(self, request, roomname):
         room = Room.objects.get(name=roomname)
@@ -101,7 +98,6 @@ class ChatRoomView(APIView):
 # 채팅방이 Pending 되면 더이상 Status 관리 X
 # chat/rooms/<str:roomname>/status/
 class ChatRoomStatusView(APIView):
-    # @query_debugger
     @transaction.atomic()
     def put(self, request, roomname): # ROOM 상태 변경
         room_status_param = request.POST.get('room_status') 
@@ -119,7 +115,6 @@ class ChatRoomStatusView(APIView):
 
 # chat/rooms/<str:roomname>/messages/
 class ChatRoomMessagesView(APIView):
-    # @query_debugger
     def get(self, request, roomname):
         # room, send_user, receive_user, send_time, message,
         optimize_query = 1
@@ -137,7 +132,6 @@ class ChatRoomMessagesView(APIView):
 
 # chats/messages/
 class SaveChatMessageView(APIView):
-    # @query_debugger
     @transaction.atomic()
     def post(self, request):
         user1 = request.POST.get('user1') # requset.user
