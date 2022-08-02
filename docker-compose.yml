@@ -8,8 +8,6 @@ services:
       - 6379:6379
   nginx:
     build: ./nginx
-    volumes:
-      - static_volume:/sidepro_be/static
     ports:
       - 80:80
     depends_on:
@@ -22,22 +20,8 @@ services:
     working_dir: /sidepro_be/
     volumes:
       - ./:/sidepro_be/
-      - static_volume:/sidepro_be/static
     expose:
       - 8000
     env_file:
-      - ./.env.pub
-  #   depends_on:
-  #     - db
-  # db:
-  #   image: postgres:14.3-alpine
-  #   volumes:
-  #     - postgres_db:/var/lib/postgresql/data
-  #   env_file:
-  #     - ./.env.postgres.pub
-  #   ports:
-  #     - "5432:5432"
+      - ./.env
 
-volumes:
-  # postgres_db:
-  static_volume:

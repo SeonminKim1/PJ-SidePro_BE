@@ -1,4 +1,3 @@
-from attr import field
 from rest_framework import serializers
 from rest_pandas.serializers import PandasSerializer
 
