@@ -21,13 +21,13 @@ jobs:
         host: ${{ secrets.EC2_PRIVATE_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_PRIVATE_KEY }}
-        script: mkdir -p /home/ubuntu/sidepro/
+        script: mkdir -p /home/ubuntu/Sidepro-BE/
 
     - name: copy source via ssh key
       uses: burnett01/rsync-deployments@4.1
       with:
         switches: -avzr --delete
-        remote_path: /home/ubuntu/sidepro/
+        remote_path: /home/ubuntu/Sidepro-BE/
         remote_host: ${{ secrets.EC2_PRIVATE_HOST }}
         remote_user: ubuntu
         remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
@@ -38,4 +38,4 @@ jobs:
         host: ${{ secrets.EC2_PRIVATE_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_PRIVATE_KEY }}
-        script: docker-compose up -d --build
+        script: sudo docker-compose up -d --build
