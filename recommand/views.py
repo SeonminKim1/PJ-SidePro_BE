@@ -30,7 +30,7 @@ class RecommendView(APIView):
             user_id_list, jaccard_score_dict = user_based.get_jaccard_score_user_id_list(base_df, request.user.id)
 
             # 4. 최종 user들의 project 가져오기
-            project_querysets = Project.objects.select_related('user').prefetch_related('skills', 'bookmark', 'comment')\
+            project_querysets = Project.objects.select_related('user').prefetch_related('skills', 'bookmark', 'comment_set')\
                 .filter(user__in = user_id_list) # user
             project_querysets_list = list(project_querysets)
 
