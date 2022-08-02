@@ -20,8 +20,8 @@ class RecommendView(APIView):
     def get(self, request):
         # 로컬이면 crontab없이 진행
         if os.environ.get('IS_LOCAL')=='TRUE':
-            from .cron import recommand_crontab
-            recommand_crontab()
+            from .cron import recommend_crontab
+            recommend_crontab()
 
         # 최적화 전 Query 코드
         optimize_query = 1

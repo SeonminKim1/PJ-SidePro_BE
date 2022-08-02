@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 if os.environ.get('IS_LOCAL')=='FALSE':
     INSTALLED_APPS.append('django_crontab')
     CRONJOBS=[
-    ('*/1 * * * *', 'recommand.cron.crontab_ex', '>> /home/ubuntu/fake/fucklog.log'),
+    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /home/ubuntu/Sidepro-BE/log/crontab.log'),
     ]
 
 
