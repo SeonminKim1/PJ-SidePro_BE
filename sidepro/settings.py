@@ -38,7 +38,6 @@ else: # for Production
 INSTALLED_APPS = [
     'corsheaders',
     'channels',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,14 +53,27 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 ]
 
+# CRON TAB
+if os.environ.get('IS_LOCAL')=='FALSE':
+    INSTALLED_APPS.append('django_crontab')
+    CRONJOBS=[
+    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /home/ubuntu/Sidepro-BE/log/crontab.log'),
+    ]
+
+
 ASGI_APPLICATION = 'sidepro.asgi.application'
+
+if os.environ.get('IS_LOCAL') == 'TRUE':
+    redis_ip = '127.0.0.1'
+else: # for production
+    redis_ip = '3.37.194.222'
 
 # Channel layers => redis
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer', 
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(redis_ip, 6379)],
         },
     },
 }

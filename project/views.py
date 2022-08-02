@@ -1,14 +1,7 @@
-from tokenize import String
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
-from django.db.models import Q
-from django.db.models import F
-
-from django.db import transaction
-
-from user.models import Skills
 
 from .models import Comment, Project
 from .serializers import (CommentSerializer, 
@@ -18,12 +11,20 @@ from .serializers import (CommentSerializer,
                           ProjectDetailViewSerializer,
                           BaseCommentSerializer)
 
-from django.db.models import Count
-from django.utils import timezone
+# orm 관련 메서드 import
+from django.db.models import Q
+from django.db.models import F
+from django.db import transaction
 
-# S3 업로드 관련
+# 예외 처리를 위한 import
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+
+# S3 업로드 관련 import
 import boto3
 import os
+from django.utils import timezone
+
 
 # 페이지네이션 관련
 from .pagination import PaginationHandlerMixin, BasePagination
@@ -110,86 +111,110 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
 class ProjectDetailAPIView(APIView):
     # 게시물 하나 자세히 보기
     def get(self, request, project_id):
-        project = Project.objects.prefetch_related("comment_set","skills","bookmark").get(id=project_id)
-        # project = Project.objects.get(id=project_id)
-        # 조회수 증가
-        # project.count = (F("count") + 1)
-        project.count += 1
-        project.save()        
-        
-        serializer = ProjectDetailViewSerializer(project)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            project = Project.objects.prefetch_related("comment_set","skills","bookmark").get(id=project_id)
+            # project = Project.objects.get(id=project_id)
+            # 조회수 증가
+            # project.count = (F("count") + 1)
+            project.count += 1
+            project.save()        
+            
+            serializer = ProjectDetailViewSerializer(project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('게시글을 찾을 수 없습니다')
+    
     
     # 게시글 수정
     def put(self, request, project_id):
-        project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("comment_set").prefetch_related("bookmark").get(id=project_id)
-        # project = Project.objects.get(id=project_id)
-        serializer = ProjectDetailSerializer(project, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("comment_set").prefetch_related("bookmark").get(id=project_id)
+            # project = Project.objects.get(id=project_id)
+            serializer = ProjectDetailSerializer(project, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('게시글을 찾을 수 없습니다')
     
     # 게시글 삭제
     def delete(self, request, project_id):
-        Project.objects.get(id=project_id).delete()
-        return Response({"success": "게시글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+        try:
+            project = Project.objects.get(id=project_id)
+            project.delete()
+            return Response({"success": "게시글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('게시글을 찾을 수 없습니다')
     
 # project/<project_id>/comment/
 class CommentAPIView(APIView):
     # 댓글 작성
     @transaction.atomic
     def post(self, request, project_id):
-        data = request.data.copy()
-        data["user"] = request.user.id
-        data["project"] = project_id
-        project = Project.objects.get(id=project_id)
-        project.comment_count = F("comment_count") + 1
-        project.save()
-        serializer = BaseCommentSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        
-        # user 필드를 username으로 return 
-        comment_serialize_data = serializer.data.copy()
-        comment_serialize_data['user'] = request.user.username
+        try:
+            data = request.data.copy()
+            data["user"] = request.user.id
+            data["project"] = project_id
 
-        return Response ({'msg':'댓글 등록 성공', 'data':comment_serialize_data}, status=status.HTTP_200_OK)
+            project = Project.objects.get(id=project_id)
+            project.comment_count = F("comment_count") + 1
+            project.save()
+            serializer = BaseCommentSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            
+            # user 필드를 username으로 return 
+            comment_serialize_data = serializer.data.copy()
+            comment_serialize_data['user'] = request.user.username
+
+            return Response ({'msg':'댓글 등록 성공', 'data':comment_serialize_data}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('게시글을 찾을 수 없습니다')
 
 # project/<projcet_id>/comment/<comment_id>
 class CommentModifyAPIView(APIView):
     # 댓글 수정
     def put(self, request, project_id, comment_id):
-        comment = Comment.objects.get(id=comment_id, project=project_id)
-        serializer = CommentSerializer(comment, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'msg':'댓글 수정 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
+        try:
+            comment = Comment.objects.get(id=comment_id, project=project_id)
+            serializer = CommentSerializer(comment, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({'msg':'댓글 수정 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+                raise Http404('댓글을 찾을 수 없습니다')
     
     # 댓글 삭제
     @transaction.atomic
     def delete(self, request, project_id, comment_id):
-        project = Project.objects.get(id=project_id)
-        project.comment_count = F("comment_count") - 1
-        project.save()
-        Comment.objects.get(id=comment_id, project=project_id).delete()
-        return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+        try:
+            project = Project.objects.get(id=project_id)
+            project.comment_count = F("comment_count") - 1
+            project.save()
+            Comment.objects.get(id=comment_id, project=project_id).delete()
+            return Response({"success": "댓글이 삭제되었습니다!"}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('댓글을 찾을 수 없습니다')
 
 # project/<int:project_id>/bookmark/
 class BookmarkAPIView(APIView):
     # 북마크 클릭 시
     @transaction.atomic
     def post(self, request, project_id):
-        project = Project.objects.get(id=project_id)
-        bookmark = project.bookmark.all()
-        if request.user in bookmark:
-            project.bookmark_count =  F('bookmark_count') - 1
-            project.bookmark.remove(request.user)
-            # project.bookmark_count -= 1
-            project.save()
-            return Response({"msg": "북마크 해제 완료!"})
-        else:
-            project.bookmark_count = F("bookmark_count") + 1
-            project.bookmark.add(request.user)
-            # project.bookmark_count += 1
-            project.save()        
-        return Response({"msg": "북마크 등록 완료!"})
+        try:
+            project = Project.objects.get(id=project_id)
+            bookmark = project.bookmark.all()
+            if request.user in bookmark:
+                project.bookmark_count =  F('bookmark_count') - 1
+                project.bookmark.remove(request.user)
+                # project.bookmark_count -= 1
+                project.save()
+                return Response({"msg": "북마크 해제 완료!"})
+            else:
+                project.bookmark_count = F("bookmark_count") + 1
+                project.bookmark.add(request.user)
+                # project.bookmark_count += 1
+                project.save()        
+            return Response({"msg": "북마크 등록 완료!"})
+        except ObjectDoesNotExist:
+                    raise Http404('게시글을 찾을 수 없습니다')
