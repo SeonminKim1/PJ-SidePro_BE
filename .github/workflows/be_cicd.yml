@@ -5,7 +5,7 @@ on:
     branches:
       - publish
 jobs:
-  build-image:
+  build-image-CD:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -18,9 +18,9 @@ jobs:
     - name: create remote directory
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ secrets.EC2_PRIVATE_HOST }}
         username: ubuntu
-        key: ${{ secrets.KEY }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
         script: mkdir -p /home/ubuntu/sidepro/
 
     - name: copy source via ssh key
@@ -28,14 +28,14 @@ jobs:
       with:
         switches: -avzr --delete
         remote_path: /home/ubuntu/sidepro/
-        remote_host: ${{ secrets.HOST }}
+        remote_host: ${{ secrets.EC2_PRIVATE_HOST }}
         remote_user: ubuntu
-        remote_key: ${{ secrets.KEY }}
+        remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ secrets.EC2_PRIVATE_HOST }}
         username: ubuntu
-        key: ${{ secrets.KEY }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
         script: docker-compose up -d --build
