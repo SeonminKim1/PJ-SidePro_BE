@@ -38,7 +38,6 @@ else: # for Production
 INSTALLED_APPS = [
     'corsheaders',
     'channels',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +52,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
 ]
+
+# CRON TAB
+if os.environ.get('IS_LOCAL')=='FALSE':
+    INSTALLED_APPS.append('django_crontab')
+    CRONJOBS=[
+    ('*/1 * * * *', 'recommand.cron.crontab_ex', '>> /home/ubuntu/fake/fucklog.log'),
+    ]
+
 
 ASGI_APPLICATION = 'sidepro.asgi.application'
 
