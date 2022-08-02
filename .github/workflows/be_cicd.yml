@@ -15,27 +15,27 @@ jobs:
         touch .env
         echo "${{ secrets.ENV_VARS }}" >> .env
         
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sidepro-be:$(date +%s)
-      
-  cd-pipeline:
-    needs: build-image
-    name: continuos deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_PRIVATE_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "docker-compose.yml"
-          target: "/home/ubuntu/"
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_PRIVATE_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: "docker-compose pull && docker-compose up -d"
+    - name: create remote directory
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: mkdir -p /home/ubuntu/sidepro/
+
+    - name: copy source via ssh key
+      uses: burnett01/rsync-deployments@4.1
+      with:
+        switches: -avzr --delete
+        remote_path: /home/ubuntu/sidepro/
+        remote_host: ${{ secrets.HOST }}
+        remote_user: ubuntu
+        remote_key: ${{ secrets.KEY }}
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: docker-compose up -d --build
