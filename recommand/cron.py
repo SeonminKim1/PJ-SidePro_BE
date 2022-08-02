@@ -6,7 +6,7 @@ from .serializers import UserProfileSkillsSerializer
 
 # Recommand
 from recommand import user_based_collab
-def recommand_crontab():
+def recommend_crontab():
     # 최적화 전 Query 코드
     optimize_query = 1
     if optimize_query:
