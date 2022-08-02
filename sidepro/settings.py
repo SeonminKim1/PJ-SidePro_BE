@@ -56,12 +56,17 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'sidepro.asgi.application'
 
+if os.environ.get('IS_LOCAL') == 'TRUE':
+    redis_ip = '127.0.0.1'
+else: # for production
+    redis_ip = '3.37.194.222'
+
 # Channel layers => redis
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer', 
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(redis_ip, 6379)],
         },
     },
 }
