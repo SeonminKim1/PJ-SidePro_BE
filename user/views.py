@@ -95,8 +95,11 @@ class UserAPIView(APIView):
     
     # 유저 탈퇴
     def delete(self, request):
-        UserModel.objects.get(id=request.user.pk).delete()
-        return Response({"msg": "탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.\n더 좋은 서비스로 찾아뵙겠습니다."}, status=status.HTTP_200_OK)
+        try:
+            UserModel.objects.get(id=request.user.pk).delete()
+            return Response({"msg": "탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.\n더 좋은 서비스로 찾아뵙겠습니다."}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404("해당 유저를 찾을 수 없습니다.")
 
 
 
