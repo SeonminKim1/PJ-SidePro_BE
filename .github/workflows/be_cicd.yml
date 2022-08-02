@@ -21,13 +21,13 @@ jobs:
         host: ${{ secrets.EC2_PRIVATE_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_PRIVATE_KEY }}
-        script: mkdir -p /home/ubuntu/Sidepro-BE/
+        script: mkdir -p /home/ubuntu/Sidepro/
 
     - name: copy source via ssh key
       uses: burnett01/rsync-deployments@4.1
       with:
         switches: -avzr --delete
-        remote_path: /home/ubuntu/Sidepro-BE/
+        remote_path: /home/ubuntu/Sidepro/
         remote_host: ${{ secrets.EC2_PRIVATE_HOST }}
         remote_user: ubuntu
         remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
