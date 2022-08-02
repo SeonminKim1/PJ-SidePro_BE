@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import MeetTime, Region, Skills, User, UserProfile
+from .models import Skills 
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
@@ -112,7 +112,6 @@ class AnotherUserAPIView(APIView):
     def get(self, request, user_id):
         try:
             user = UserModel.objects.select_related("userprofile").get(id=user_id)
-            # user = UserModel.objects.get(id=user_id)
             serializer = UserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
@@ -143,18 +142,13 @@ class MyBookmarkProjectView(APIView):
         return Response(project_serializer.data, status=status.HTTP_200_OK)
 
 
-# utils - QueryDebugger
-from _utils.query_utils import query_debugger # Query Debugger
-
 # user/info/
 class GetLoginUserInfoView(APIView):
-    @query_debugger
     def get(self, request):
         return Response({"login_username": request.user.username}, status=status.HTTP_200_OK)
 
 # user/main/init/
 class GetBaseInfoView(APIView):
-    @query_debugger
     def get(self, request):
         skills = Skills.objects.all()
         skills_data = SkillsSerializer(skills, many=True).data
