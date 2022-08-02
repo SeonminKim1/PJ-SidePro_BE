@@ -6,7 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Skills 
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
-from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
+from .serializers import AnotherUserSerializer, UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
 from .serializers import SkillsSerializer
 
 from project.models import Project as ProjectModel
@@ -112,7 +112,7 @@ class AnotherUserAPIView(APIView):
     def get(self, request, user_id):
         try:
             user = UserModel.objects.select_related("userprofile").get(id=user_id)
-            serializer = UserSerializer(user)
+            serializer = AnotherUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             raise Http404('해당 유저를 찾을 수 없습니다')
