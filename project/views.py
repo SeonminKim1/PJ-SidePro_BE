@@ -1,3 +1,4 @@
+from tokenize import String
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -112,7 +113,8 @@ class ProjectDetailAPIView(APIView):
         project = Project.objects.prefetch_related("comment_set","skills","bookmark").get(id=project_id)
         # project = Project.objects.get(id=project_id)
         # 조회수 증가
-        project.count = F("count") + 1
+        # project.count = (F("count") + 1)
+        project.count += 1
         project.save()        
         
         serializer = ProjectDetailViewSerializer(project)
