@@ -23,9 +23,9 @@ jobs:
     name: continuos deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@publish
+      - uses: actions/checkout@master
       - name: copy file via ssh password
-        uses: appleboy/scp-action@publish
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_PRIVATE_HOST }}
           username: ubuntu
