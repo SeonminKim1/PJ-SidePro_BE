@@ -63,5 +63,7 @@ class RecommendProjectsSerializer(serializers.ModelSerializer):
             "created_date", 
             "updated_date", 
             "bookmark",
+            "bookmark_count",
             "comment",
+            "comment_count"
         ] 
