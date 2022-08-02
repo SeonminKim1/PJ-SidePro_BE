@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import MeetTime, Region, Skills, UserProfile
+from .models import MeetTime, Region, Skills, User, UserProfile
 from .models import User as UserModel
 from .models import UserProfile as UserProfileModel
 from .serializers import UserSerializer, UserJoinSerializer, UserProfileDetailSerializer
@@ -11,10 +11,15 @@ from .serializers import SkillsSerializer
 
 from project.models import Project as ProjectModel
 from project.serializers import ProjectViewSerializer
-from django.utils import timezone
-# S3 업로드 관련
+
+# 예외 처리를 위한 import
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+
+# S3 업로드 관련 import
 import boto3
 import os
+from django.utils import timezone
 
 
 # user/upload/
@@ -79,11 +84,14 @@ class UserAPIView(APIView):
     
     # 로그인한 유저프로필 수정
     def put(self, request):
-        user = UserProfileModel.objects.get(user_id=request.user.id)
-        serializer = UserProfileDetailSerializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            user = UserProfileModel.objects.get(user_id=request.user.id)
+            serializer = UserProfileDetailSerializer(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404("해당 유저를 찾을 수 없습니다.")
     
     # 유저 탈퇴
     def delete(self, request):
@@ -99,11 +107,13 @@ class AnotherUserAPIView(APIView):
     
     # 다른 유저 정보 보기
     def get(self, request, user_id):
-        user = UserModel.objects.select_related("userprofile").get(id=user_id)
-        # user = UserModel.objects.get(id=user_id)
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+        try:
+            user = UserModel.objects.select_related("userprofile").get(id=user_id)
+            # user = UserModel.objects.get(id=user_id)
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            raise Http404('해당 유저를 찾을 수 없습니다')
 
 
 # user/profile/project/
