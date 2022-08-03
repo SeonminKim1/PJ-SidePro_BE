@@ -41,6 +41,9 @@ class RecommendProjectsSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
         return obj.user.username 
+    user_id = serializers.SerializerMethodField()
+    def get_user_id(self, obj):
+        return obj.user.id
 
     comment = CommentSerializer(many=True, source="comment_set")
 
@@ -53,6 +56,7 @@ class RecommendProjectsSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             "user",
+            "user_id",
             "title", 
             "description", 
             "skills", 
