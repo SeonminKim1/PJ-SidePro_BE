@@ -24,8 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - run : chmod 777 docker-compose.yml
       - name: copy file via ssh password
-        run : chmod 777 docker-compose.yml
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_PRIVATE_HOST }}
