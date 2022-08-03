@@ -59,7 +59,7 @@ if os.environ.get('IS_LOCAL')=='TRUE':
 else: # for production
     INSTALLED_APPS.append('django_crontab')
     CRONJOBS=[
-    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> sidepro_be/log/crontab.log'),
+    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /sidepro_be/log/crontab.log'),
     ]
 
 
