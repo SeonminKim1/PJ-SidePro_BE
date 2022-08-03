@@ -2,6 +2,7 @@
 import sys, os
 import pandas as pd
 from sklearn.metrics import pairwise_distances
+import threading
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from user import constants
@@ -23,6 +24,7 @@ class RecommendUserProject:
         self.jaccard_score_df = None
         pass
 
+    # 1. 기본 Base DF 만들기 (USER별 SKILLS 반영)
     def make_df(self, data):
         base_df = pd.DataFrame(index = data['user'], columns = range(1, len(constants.SKILLS_CHOICE)+1)).fillna(0)
         
@@ -35,11 +37,13 @@ class RecommendUserProject:
             base_df.loc[user][non_selected_skills_list] = 0
         return base_df
 
+    # 2. 자카드 유사도 구하기 (return dataframe)
     def get_jaccard_score_df(self, base_df):
         # get the pairwise Jaccard Similarity 
         jaccard_score_df = pd.DataFrame(1-pairwise_distances(base_df.values, metric='jaccard'), index=base_df.index, columns=base_df.index).applymap(lambda x:round(x, 4))
         return jaccard_score_df
 
+    # 3. 자카드 유사도 가장 높은 User N명 출력
     def get_jaccard_user_id_list(self, jaccard_score_df, user_id):
         jaccard_score_cut_df = jaccard_score_df.loc[user_id][jaccard_score_df.loc[user_id]>=JACCARD_SCORE_THRESHOLD]
         jaccard_score_cut_df = jaccard_score_cut_df.sort_values(ascending=False)
