@@ -54,13 +54,16 @@ INSTALLED_APPS = [
 ]
 
 # CRON TAB
-if os.environ.get('IS_LOCAL')=='FALSE':
+if os.environ.get('IS_LOCAL')=='TRUE':
+    pass
+else: # for production
     INSTALLED_APPS.append('django_crontab')
     CRONJOBS=[
-    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /home/ubuntu/Sidepro-BE/log/crontab.log'),
+    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> sidepro_be/log/crontab.log'),
     ]
 
 
+### ASGI - Channels, Redis..
 ASGI_APPLICATION = 'sidepro.asgi.application'
 
 if os.environ.get('IS_LOCAL') == 'TRUE':
