@@ -26,7 +26,10 @@ def recommend_crontab():
         base_df = user_based.make_df(result)
         jaccard_score_df = user_based.get_jaccard_score_df(base_df)
     try:
-        jaccard_score_df.to_csv('recommend.csv')
+        if os.environ.get('IS_LOCAL')=='TRUE':
+            jaccard_score_df.to_csv('recommand/recommend.csv')
+        else:
+            jaccard_score_df.to_csv('/sidepro_be/recommend.csv')
         print('=========================')
         print('crontab 실행 결과 - 유사도 csv 저장 성공', jaccard_score_df.shape)
         print(jaccard_score_df)

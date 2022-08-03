@@ -50,11 +50,14 @@ class ProjectSerializer(serializers.ModelSerializer):
                     
 class ProjectViewSerializer(serializers.ModelSerializer):
     comment = CommentSerializer(many=True, source="comment_set")
-
     
     skills = serializers.SerializerMethodField()
     def get_skills(self, obj):
         return [skills.name for skills in obj.skills.all()]
+    
+    user_id = serializers.SerializerMethodField()
+    def get_user_id(self,obj):
+        return obj.user.id
     
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
@@ -62,7 +65,7 @@ class ProjectViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProjectModel
-        fields = ["id","user", "title", "description",
+        fields = ["id","user","user_id", "title", "description",
                   "skills", "thumnail_img_path",
                   "content", "count", "github_url",
                   "created_date", "updated_date", 

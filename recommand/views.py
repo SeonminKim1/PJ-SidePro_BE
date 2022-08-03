@@ -22,8 +22,10 @@ class RecommendView(APIView):
         if os.environ.get('IS_LOCAL')=='TRUE':
             from .cron import recommend_crontab
             recommend_crontab()
+            jaccard_score_df = pd.read_csv('recommand/recommend.csv', index_col=0)
+        else:
+            jaccard_score_df = pd.read_csv('/sidepro_be/recommend.csv', index_col=0)
 
-        jaccard_score_df = pd.read_csv('recommend.csv', index_col=0)
 
         # 최적화 전 Query 코드
         optimize_query = 1
