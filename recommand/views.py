@@ -12,7 +12,7 @@ from project.models import Comment, Project
 from .serializers import UserProfileSkillsSerializer, RecommendProjectsSerializer
 
 from _utils.query_utils import query_debugger # Query Debugger
-from recommand import user_based_collab
+from .ai import user_based 
 
 # userprofile 업데이트 하면 추천 리스트 업데이트
 class RecommendView(APIView):
@@ -26,6 +26,7 @@ class RecommendView(APIView):
         # 최적화 전 Query 코드
         optimize_query = 1
         if optimize_query:
+            user_based_collab = user_based.RecommendUserProject()
             jaccard_score_df = user_based_collab.jaccard_score_df
             
             # 3. 자카드 유사도 가장 높은 User N명 출력
