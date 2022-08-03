@@ -16,8 +16,6 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -54,13 +52,16 @@ INSTALLED_APPS = [
 ]
 
 # CRON TAB
-if os.environ.get('IS_LOCAL')=='FALSE':
+if os.environ.get('IS_LOCAL')=='TRUE':
+    pass
+else: # for production
     INSTALLED_APPS.append('django_crontab')
     CRONJOBS=[
-    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /home/ubuntu/Sidepro-BE/log/crontab.log'),
+    ('*/1 * * * *', 'recommand.cron.recommend_crontab', '>> /sidepro_be/log/crontab.log'),
     ]
 
 
+### ASGI - Channels, Redis..
 ASGI_APPLICATION = 'sidepro.asgi.application'
 
 if os.environ.get('IS_LOCAL') == 'TRUE':

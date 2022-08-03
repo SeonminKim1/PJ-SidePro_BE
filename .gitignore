@@ -11,3 +11,4 @@ pyvenv.cfg
 .env.postgres.prod
 .env.dev
 .env.postgres.dev
+*.csv
