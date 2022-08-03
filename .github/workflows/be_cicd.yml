@@ -16,14 +16,15 @@ jobs:
         echo "${{ secrets.ENV_VARS }}" >> .env
         
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag myimagename:$(date +%s)
+      run: docker build . --file Dockerfile --tag sidepro-be:$(date +%s)
       
-  cd-pipeline:
+  deploy:
     needs: build-image
     name: continuos deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - run : sudo chmod 750 /home/ubuntu/sidepro/docker-compose.yml
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
