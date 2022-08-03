@@ -56,6 +56,8 @@ class ProjectRecommendReadTest(APITestCase):
                     title=self.faker.word(),
                     description=self.faker.word(),
                     thumnail_img_path=self.faker.sentence(),
+                    # bookmark_count = 1,
+                    # comment_count=1,
                     content=self.faker.word(),
                     github_url="http://www.naver.com"
                 )

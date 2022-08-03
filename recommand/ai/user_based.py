@@ -40,9 +40,12 @@ def get_jaccard_score_df(base_df):
 
 # 3. 자카드 유사도 가장 높은 User N명 출력
 def get_jaccard_user_id_list(jaccard_score_df, user_id):
-    jaccard_score_cut_df = jaccard_score_df.loc[user_id][jaccard_score_df.loc[user_id]>=JACCARD_SCORE_THRESHOLD]
-    jaccard_score_cut_df = jaccard_score_cut_df.sort_values(ascending=False)
-    jaccard_score_user_id_list = list(set(jaccard_score_cut_df.index)- set([user_id]))
+    try:
+        jaccard_score_cut_df = jaccard_score_df.loc[user_id][jaccard_score_df.loc[user_id]>=JACCARD_SCORE_THRESHOLD]
+        jaccard_score_cut_df = jaccard_score_cut_df.sort_values(ascending=False)
+        jaccard_score_user_id_list = list(set(jaccard_score_cut_df.index)- set([user_id]))
+    except:
+        return None, None
     return jaccard_score_user_id_list, jaccard_score_cut_df.to_dict()# [3,4]
 
 if __name__ == '__main__':
