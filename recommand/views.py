@@ -27,7 +27,7 @@ class RecommendView(APIView):
         optimize_query = 1
         if optimize_query:
             user_based_collab = user_based.RecommendUserProject()
-            # print('===views', user_based_collab)
+            print('===views', user_based_collab)
 
             jaccard_score_df = user_based_collab.jaccard_score_df
             
