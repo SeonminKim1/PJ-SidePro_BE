@@ -26,11 +26,11 @@ def recommend_crontab():
         user_based_collab.base_df = user_based_collab.make_df(result)
         user_based_collab.jaccard_score_df = user_based_collab.get_jaccard_score_df(user_based_collab.base_df)
     print('=========================')
-    print('cron === user_based_collab:', user_based_collab)
+    print('cron === user_based_collab:', str(user_based_collab))
     print('crontab 실행 결과 유사도 표 ', user_based_collab.jaccard_score_df.shape)
     print(user_based_collab.jaccard_score_df)
     print('=========================')
 
-if __name__ == "__main__":
-    pass
+# if __name__ == "__main__":
+#     pass
     # print(user_based_collab)
