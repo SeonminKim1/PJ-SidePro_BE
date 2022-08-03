@@ -22,6 +22,8 @@ jobs:
     needs: build-image
     name: continuos deploy
     runs-on: ubuntu-latest
+    container:
+      options: --user root
     steps:
       - uses: actions/checkout@master
       - name: copy file via ssh password
