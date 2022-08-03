@@ -18,7 +18,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag myimagename:$(date +%s)
       
-  cd-pipeline:
+  deploy:
     needs: build-image
     name: continuos deploy
     runs-on: ubuntu-latest
