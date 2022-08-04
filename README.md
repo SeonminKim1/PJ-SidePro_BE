@@ -149,17 +149,17 @@
 <hr>
 
 ## 👉 시연 화면
-#### 회원가입, 로그인 화면
-![image](https://user-images.githubusercontent.com/33525798/173514356-84840d07-2425-4095-b9fa-07d50a19bc0d.png)
+#### 🎉 첫 화면, 회원가입, 로그인 화면
+![image](https://user-images.githubusercontent.com/33525798/182766448-b277aebb-2bf3-45ac-ba2e-4394131d7621.png)
 
-#### 유화 메인 페이지, 유화 상세 페이지
-![image](https://user-images.githubusercontent.com/33525798/173514477-228b4897-bee0-491e-847c-5720d11a5eb4.png)
+#### 🎉 메인 페이지 (게시판)
+![image](https://user-images.githubusercontent.com/33525798/182766477-2e087332-be7c-416d-9a4a-d29265667322.png)
 
-#### 마이 갤러리 페이지
-![image](https://user-images.githubusercontent.com/33525798/173514527-8e456009-0dcb-4e5d-890a-e476ef4331fb.png)
+#### 🎉 상세 페이지 (글 조회, 글 쓰기)
+![image](https://user-images.githubusercontent.com/33525798/182768500-30e352b8-f443-422b-a4c0-50f51645b53e.png)
 
-#### 유화 만들기 페이지 (AI)
-![image](https://user-images.githubusercontent.com/33525798/173514527-8e456009-0dcb-4e5d-890a-e476ef4331fb.png)
+#### 🎉 마이(유저) 페이지
+![image](https://user-images.githubusercontent.com/33525798/182767190-ec31f7ff-7d90-49b1-9c8e-0bd513d8526b.png)
 
-
-
+#### 🎉 채팅
+![image](https://user-images.githubusercontent.com/33525798/182768639-acd8910e-d91b-4ff3-8e5b-635d7fcd7c37.png)
