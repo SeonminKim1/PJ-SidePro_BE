@@ -8,7 +8,7 @@ Lib/
 Scripts/
 pyvenv.cfg
 .env
-.env.postgres.prod
+.env.postgres
 .env.dev
 .env.postgres.dev
 *.csv
