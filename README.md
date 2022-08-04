@@ -101,16 +101,16 @@
 
 ## :computer: Development
 
-#### 로그인/회원가입
+#### 🎉 로그인/회원가입
 - 기본 vaildation & 로그인 JWT Token 사용
 
-#### 프로젝트 게시판
+#### 🎉 프로젝트 게시판
 - 프로젝트 목록 조회 (Django-Pagination)
 - 프로젝트 등록 (Toast UI Editor / Image Preview)
 - 프로젝트 검색, 정렬 (기술 스택 기반 검색 / 조회순, 최신순, 인기순 정렬)
 - 프로젝트 상세 조회 / 수정 / 삭제 (댓글 CRUD, 북마크 ON/OFF)
 
-#### 커피챗 기능
+#### 🎉 커피챗 기능
 - 채팅 Room 목록 (조회, 생성, 삭제)
 - 채팅 소켓 연결에 따른 Room Status 관리 (Running, Pending, Stop)
 - 채팅 유저 프로필 조회
@@ -119,7 +119,7 @@
    - Daphne ASGI 서버 => WS 프로토콜 요청 처리
    - Redis를 이용한 실시간 메시지 전송
 
-#### 추천 시스템 기능
+#### 🎉 추천 시스템 기능
 - User-Based 추천 시스템 ("나와 비슷한 기술 스택을 보유한 유저의 프로젝트" 추천)
 - Django-CronTab을 이용한 유사도 계산 부하 방지 (1분마다 Query & 유사도 계산)
 - 스토리
@@ -127,13 +127,13 @@
    - 2) 유사도 계산 파일 csv 저장
    - 3) 사용자 요청시 해당 파일 읽어서 추천 프로젝트 결과 출력
    
-#### 프로필 페이지(마이/유저 페이지)
+#### 🎉 프로필 페이지(마이/유저 페이지)
 - 마이(유저) 프로젝트 모아보기
 - 북마크한 프로젝트 모아보기
 - 유저 프로필 정보 조회
 - 내 프로필 정보 조회 수정, 삭제
 
-#### AWS Infra & CI-CD
+#### 🎉 AWS Infra & CI-CD
 - AWS EC2 내 container 기반 Publish 배포
 - AWS S3 FE 버켓 2개 이용하여 각각 정적 웹 호스팅, 업로드 파일 저장소
 - AWS IAM 부여하여 Infra Team 공동 관리
@@ -141,7 +141,7 @@
 - AWS ROUTER 53 도메인 등록하여 가독성, 접근성 증가
 - GitActions 이용한 CI-CD 자동화 구축
 
-#### Nginx / Gunicorn / Daphne
+#### 🎉 Nginx / Gunicorn / Daphne
 - Nginx : Proxy 역할 
 - Gunicorn : Django 배포용 WSGI서버 http protocol 요청 처리 (worker : 2)
 - Daphne : Django 배포용 ASGI서버 WebSocket portocol 요청 처리
