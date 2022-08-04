@@ -9,11 +9,21 @@ services:
 
   nginx:
     build: ./nginx
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - web
       - asgiserver
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
 
   web:
     build: .
@@ -27,7 +37,7 @@ services:
       - 8000
     env_file:
       - ./.env
-      
+
   asgiserver:
     build: .
     command: daphne -u /tmp/daphne.sock sidepro.asgi:application --bind 0.0.0.0 -p 8001

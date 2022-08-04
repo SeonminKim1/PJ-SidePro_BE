@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/33525798/177453882-a8d55a06-1556-4a63-b1f8-244fca57b0a4.png)
+![image](https://user-images.githubusercontent.com/87006912/182738130-a7c87bdf-0522-4382-b6d4-8ec2e38ef6b3.png)
 
 ## :owl: SidePro (SideProject)
 - 개발자를 위한 사이드 프로젝트 공유 플랫폼 서비스 (with. 커피챗을 곁들인) 
@@ -11,7 +11,8 @@
 <hr>
 
 ## 📚 Project Structure
-![image](https://user-images.githubusercontent.com/33525798/177453424-fbabf1d3-6109-4e68-a9cd-83c265fc4637.png)
+![image](https://user-images.githubusercontent.com/87006912/182737967-eb7e3ae2-1e8d-46d0-8a9f-241f027cf656.png)
+
 <hr>
 
 ## :handshake: Project-Rules
@@ -27,10 +28,11 @@
 - [SMOPS-FE Project](https://github.com/SeonminKim1/SMOPS-FE)
 
 #### Figma Mock-up
-![image](https://user-images.githubusercontent.com/33525798/177453735-59c483e0-a638-42fd-bccb-47b1795641a3.png)
+![ss](https://user-images.githubusercontent.com/87006912/182737861-0cbc69de-68a6-4257-8ff8-d9b1ce50d381.png)
+
 
 #### DB Modeling   
-![image](https://user-images.githubusercontent.com/33525798/177455609-da9e00a8-560e-45d2-a174-b300e86b18c6.png)
+![SIDEPRO_DB_FINAL](https://user-images.githubusercontent.com/87006912/182737490-554e9094-6439-4e14-8608-e60c4af2445c.png)
 
 <hr>
 
@@ -61,37 +63,61 @@ $ python auto_cleancode.py
 
 ## 👉 Structure
 ```
-┌─smops
-├── smops               // project
-│   ├── urls.py       
+┌─SIDEPRO
+├── sidepro             // project
+│   ├── urls.py         // base url
+│   ├── asgi.py         // chat route setting
 │   ├── settings.py     // setting
 │   └── ...
-├── art                 // app
-│   ├── models.py       // DB Model - User
+├── project             // app
+│   ├── models.py       // DB Model - project, comment
 │   ├── views.py        // View Functions
 │   ├── serializers.py  // Serializers
+│   ├── tests.py        // Test Code
+│   ├── pagination.py   // pagination
 │   └── ...
-├── mygallery           // app
-│   ├── models.py       // DB Model - Restaurant, Category
+├── chat                // app
+│   ├── models.py       // DB Model - status, room, chat
 │   ├── views.py        // View Functions
 │   ├── serializers.py  // Serializers
+│   ├── tests.py        // Test Code
+│   ├── constants.py    // Constants
+│   ├── consumers.py    // Consumer
+│   ├── routung.py      // Routing
 │   └── ...
-├── ai                  // app + ai GAN
-│   ├── service/        // AI Style Transfer 
-│   ├── models.py       // DB Model - Star 
+├── ai                  // app
 │   ├── views.py        // View Functions
-│   ├── upload.py       // AWS S3 Upload Code 
 │   ├── serializers.py  // Serializers
+│   ├── tests.py        // Test Code
+│   ├── cron.py         // Crontab
 │   └── ...
 ├── user                // app
-│   ├── models.py       // DB Model - Diary
+│   ├── models.py       // DB Model - user, userprofile, ...
 │   ├── views.py        // View Functions
 │   ├── serializers.py  // Serializers
+│   ├── tests.py        // Test Code
+│   ├── constants.py    // Constants
 │   └── ...
-├── media 
-│   └── test_img/       // test img    
+├── _utils 
+│   ├── auto_clean_pyc_migrate.py    // Migrations
+│   ├── auto_cleancode.py            // Run black, isort
+│   ├── auto.runserver.py            // Run Server
+│   ├── query_utils.py               // Query Debuger
+│   └── set_basedb.sql               // Base DB Data
 │
-├── **manage.py**           // 메인
+├── .github\workflow
+│   └── be_cicd.yml     // CI/CD PIPE LINE    
+│
+├── log 
+│   └── a.txt           // Save crontab log
+│
+├── nginx 
+│   ├── nginx.conf      // nginx
+│   └── Dokerfile       // nginx Dokerfile
+│
+├── Dockerfile          // Dokerfile
+├── docker-compose.yaml // Doker-Compose
+├── **manage.py**        
 └── requirements.txt
 ```
 
@@ -101,36 +127,62 @@ $ python auto_cleancode.py
 ## :computer: Development
 
 #### Login/Join Page
-- 회원가입 vaildation
+- 회원가입,로그인 vaildation
 - 로그인 JWT Token 부여
+- 소셜로그인(미구현)
 
-#### 유화 메인 페이지
-- 유화 카테고리 별 조회 : 인물화, 풍경화, 정물화, 동물화
-- 유화 필터링 별 조회
-   - (1) 정렬 : 등록일, 가격 등
-   - (2) 가격 범위 : ~10만원, ~30만원
-   - (3) 그림형태
-- 유화 아티스트 검색
+#### 메인 페이지
+- 배너 출력
+1) github-repo 2)스파르타 3)event예시 4) 설문
+- 프로젝트 리스트 출력(pagination)
+- 프로젝트 북마크
+- 프로젝트 작성한 유저와 커피챗하기
+- 프로젝트 유저페이지로 이동
+- 프로젝트 필터링 별 조회
+   - 조회순, 최신순, 인기순(북마크)
+- 프로젝트 기술스택으로 검색
+- 추천 프로젝트 리스트 출력
 
-#### 유화 상세 페이지
-- 유화 정보 조회
-- 유화 로그 조회 (히스토리)
-- 유화 구매 하기
+#### 프로젝트 상세 페이지
+- 프로젝트 정보 조회
+- 프로젝트 북마크
+- 프로젝트 수정, 삭제(작성자만)
+- 댓글 작성
+- 댓글 수정, 삭제(작성자만)
 
-#### 마이 갤러리 페이지
-- 보유 중인 내 유화 조회
-- 유화 판매 상태로 업데이트 / 삭제
-- 유화 로그 조회 (히스토리)
+#### 프로필 페이지(마이/유저 페이지)
+- 프로필 정보 조회
+- 나/유저의 프로젝트 조회
+- 나/유저의 북마크한 프로젝트 조회
+- 해당 유저와 커피챗하기
+- 프로젝트 작성한 유저와 커피챗하기
+- 나의 프로필 정보 수정
+    - 프로필 수정, 삭제(로그인 유저만)
 
-#### 유화 만들기 페이지 (AI)
-- Base 이미지, Style 이미지 업로드
-- StyleGAN 모델 학습 (RUN 버튼)
-- 학습 결과 내 유화로 등록
+#### 커피챗(aside)
+- 채팅방 목록 조회
+- 채팅방 삭제
+- 유저 프로필 조회
+- 실시간 채팅
+
 
 #### AWS Infra
 - AWS EC2 이용한 외부 Publish 배포
-- AWS S3 User 이미지 업로드 및 정적 파일 관리 
+- AWS S3 FE 버켓 2개 이용하여 각각 정적 웹 호스팅, 업로드 파일 저장소
 - AWS IAM 부여하여 Infra Team 공동 관리
+- AWS RDS 이용하여 DataBase 속도와 안정성 확보 
+- AWS ROUTER 53 도메인 등록하여 가독성 접근성 증가
+
+#### docker
+- 컨테이너 기반으로 백엔드 서버의 역할
+
+#### nginx / gunicorn
+- nginx 사용하여 WEB Server 역할부여
+- gunicorn WSGI로 웹서버와 어플리케이션의 통로 사용
+
+#### github action
+- 깃허브 액션을 통해 CI & CD 자동화
+
 
 <hr>
 
