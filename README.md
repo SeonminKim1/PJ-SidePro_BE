@@ -1,65 +1,40 @@
-![image](https://user-images.githubusercontent.com/87006912/182738130-a7c87bdf-0522-4382-b6d4-8ec2e38ef6b3.png)
+![image](https://user-images.githubusercontent.com/33525798/182744743-535b6add-39db-494e-9bf6-cfbff10750df.png)
 
 ## :owl: SidePro (SideProject)
 - 개발자를 위한 사이드 프로젝트 공유 플랫폼 서비스 (with. 커피챗을 곁들인) 
+
 
 ## :panda_face: Introduction
 - **주제** : 사이드 프로젝트 공유 플랫폼 (with. 커피챗)
 - **기간** : 2022.07.07 (목) ~ 2022.08.04 (목)
 - **Team** : 김선민 ([Github](https://github.com/SeonminKim1)), 김민기 ([Github](https://github.com/kmingky)), 박재현 ([Github](https://github.com/Aeius)), 황신혜 ([Github](https://github.com/hwangshinhye)) 
+- **FE Repo** : [Sidepro-FE](https://github.com/SeonminKim1/SidePro-FE)
+- **시연 영상** : [링크](https://drive.google.com/file/d/1WMoeDu8JlXTZY_Iiehs2pSy-rCM_wPzb/view?usp=sharing)
 
 <hr>
 
+
 ## 📚 Project Structure
-![image](https://user-images.githubusercontent.com/87006912/182737967-eb7e3ae2-1e8d-46d0-8a9f-241f027cf656.png)
+![image](https://user-images.githubusercontent.com/33525798/182751102-b3ed9cf4-8f62-458c-b251-cf77179a5e90.png)
 
 <hr>
 
 ## :handshake: Project-Rules
 #### Scheduling & API 
-- [Git Project Link](https://github.com/SeonminKim1/SMOPS-BE/projects/1) / [간트차트 Link](https://docs.google.com/spreadsheets/d/1_1Sx46dnKnI8_DLJQzAASMSr7u525RFjm2Iat0beU14/edit#gid=375979933) / [API Design Link](https://www.notion.so/12cc32feafcb4e81b2377f07b04a6824?v=5b05b526a18e434cb44d62f044b26bf7)
-- [Git BE Issue Link](https://github.com/SeonminKim1/SMOPS-BE/issues) / [Git FE Issue Link](https://github.com/SeonminKim1/SMOPS-FE/issues)
+- [간트차트 Link](https://docs.google.com/spreadsheets/d/1_1Sx46dnKnI8_DLJQzAASMSr7u525RFjm2Iat0beU14/edit#gid=375979933)
+- [API Design Link](https://docs.google.com/spreadsheets/d/1_1Sx46dnKnI8_DLJQzAASMSr7u525RFjm2Iat0beU14/edit#gid=1977470109)
+- [QuerySet Optimize Experiments](https://www.notion.so/8635a07654204f84886081270cd301a8?v=d31ed66cc67843ada777bcca4238f1f9)
 
 #### Branch Info
 - main : LocalHost 실행 branch
 - publish : EC2 Hosting 실행 Branch
 
-#### Repository Info
-- [SMOPS-FE Project](https://github.com/SeonminKim1/SMOPS-FE)
+#### Figma Mock-up & DB Modeling
+![image](https://user-images.githubusercontent.com/33525798/182744857-d3dc1e10-806f-4fe8-a459-1ece66ffe173.png)
 
-#### Figma Mock-up
-![ss](https://user-images.githubusercontent.com/87006912/182737861-0cbc69de-68a6-4257-8ff8-d9b1ce50d381.png)
-
-
-#### DB Modeling   
-![SIDEPRO_DB_FINAL](https://user-images.githubusercontent.com/87006912/182737490-554e9094-6439-4e14-8608-e60c4af2445c.png)
 
 <hr>
 
-## 👉 Getting-Started
-
-``` Run
-## FrontEnd Settings
-$ git clone https://github.com/SeonminKim1/SMOPS-FE
-$ cd SMOPS-FE/
-- Install vscode extensions : Live Server 
-- Run Live Server
-
-## Backend Settings
-$ git clone https://github.com/SeonminKim1/SMOPS-BE
-$ cd SMOPS-BE/
-$ pip install -r requirements.txt
-
-- Make 'my_settings.py' from 'ex_my_settings.py
-$ python manage.py makemigrations
-$ python manage.py migrations
-$ python manage.py runserver
-
-# if you apply code convention by black & isort
-$ python auto_cleancode.py
-```
-
-<hr>
 
 ## 👉 Structure
 ```
@@ -126,63 +101,50 @@ $ python auto_cleancode.py
 
 ## :computer: Development
 
-#### Login/Join Page
-- 회원가입,로그인 vaildation
-- 로그인 JWT Token 부여
-- 소셜로그인(미구현)
+#### 로그인/회원가입
+- 기본 vaildation & 로그인 JWT Token 사용
 
-#### 메인 페이지
-- 배너 출력
-1) github-repo 2)스파르타 3)event예시 4) 설문
-- 프로젝트 리스트 출력(pagination)
-- 프로젝트 북마크
-- 프로젝트 작성한 유저와 커피챗하기
-- 프로젝트 유저페이지로 이동
-- 프로젝트 필터링 별 조회
-   - 조회순, 최신순, 인기순(북마크)
-- 프로젝트 기술스택으로 검색
-- 추천 프로젝트 리스트 출력
+#### 프로젝트 게시판
+- 프로젝트 목록 조회 (Django-Pagination)
+- 프로젝트 등록 (Toast UI Editor / Image Preview)
+- 프로젝트 검색, 정렬 (기술 스택 기반 검색 / 조회순, 최신순, 인기순 정렬)
+- 프로젝트 상세 조회 / 수정 / 삭제 (댓글 CRUD, 북마크 ON/OFF)
 
-#### 프로젝트 상세 페이지
-- 프로젝트 정보 조회
-- 프로젝트 북마크
-- 프로젝트 수정, 삭제(작성자만)
-- 댓글 작성
-- 댓글 수정, 삭제(작성자만)
-
-#### 프로필 페이지(마이/유저 페이지)
-- 프로필 정보 조회
-- 나/유저의 프로젝트 조회
-- 나/유저의 북마크한 프로젝트 조회
-- 해당 유저와 커피챗하기
-- 프로젝트 작성한 유저와 커피챗하기
-- 나의 프로필 정보 수정
-    - 프로필 수정, 삭제(로그인 유저만)
-
-#### 커피챗(aside)
-- 채팅방 목록 조회
-- 채팅방 삭제
-- 유저 프로필 조회
+#### 커피챗 기능
+- 채팅 Room 목록 (조회, 생성, 삭제)
+- 채팅 소켓 연결에 따른 Room Status 관리 (Running, Pending, Stop)
+- 채팅 유저 프로필 조회
 - 실시간 채팅
+   - Websocket & Django Channels 이용
+   - Daphne ASGI 서버 => WS 프로토콜 요청 처리
+   - Redis를 이용한 실시간 메시지 전송
 
+#### 추천 시스템 기능
+- User-Based 추천 시스템 ("나와 비슷한 기술 스택을 보유한 유저의 프로젝트" 추천)
+- Django-CronTab을 이용한 유사도 계산 부하 방지 (1분마다 Query & 유사도 계산)
+- 스토리
+   - 1) CronTab이 1분마다 나와 유사한 기술 스택 보유한 유저간의 유사도 계산
+   - 2) 유사도 계산 파일 csv 저장
+   - 3) 사용자 요청시 해당 파일 읽어서 추천 프로젝트 결과 출력
+   
+#### 프로필 페이지(마이/유저 페이지)
+- 마이(유저) 프로젝트 모아보기
+- 북마크한 프로젝트 모아보기
+- 유저 프로필 정보 조회
+- 내 프로필 정보 조회 수정, 삭제
 
-#### AWS Infra
-- AWS EC2 이용한 외부 Publish 배포
+#### AWS Infra & CI-CD
+- AWS EC2 내 container 기반 Publish 배포
 - AWS S3 FE 버켓 2개 이용하여 각각 정적 웹 호스팅, 업로드 파일 저장소
 - AWS IAM 부여하여 Infra Team 공동 관리
 - AWS RDS 이용하여 DataBase 속도와 안정성 확보 
-- AWS ROUTER 53 도메인 등록하여 가독성 접근성 증가
+- AWS ROUTER 53 도메인 등록하여 가독성, 접근성 증가
+- GitActions 이용한 CI-CD 자동화 구축
 
-#### docker
-- 컨테이너 기반으로 백엔드 서버의 역할
-
-#### nginx / gunicorn
-- nginx 사용하여 WEB Server 역할부여
-- gunicorn WSGI로 웹서버와 어플리케이션의 통로 사용
-
-#### github action
-- 깃허브 액션을 통해 CI & CD 자동화
-
+#### Nginx / Gunicorn / Daphne
+- Nginx : Proxy 역할 
+- Gunicorn : Django 배포용 WSGI서버 http protocol 요청 처리 (worker : 2)
+- Daphne : Django 배포용 ASGI서버 WebSocket portocol 요청 처리
 
 <hr>
 
