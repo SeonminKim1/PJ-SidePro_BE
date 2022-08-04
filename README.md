@@ -173,10 +173,15 @@ $ python auto_cleancode.py
 - AWS RDS 이용하여 DataBase 속도와 안정성 확보 
 - AWS ROUTER 53 도메인 등록하여 가독성 접근성 증가
 
-#### Doker
-
+#### docker
+- 컨테이너 기반으로 백엔드 서버의 역할
 
 #### nginx / gunicorn
+- nginx 사용하여 WEB Server 역할부여
+- gunicorn WSGI로 웹서버와 어플리케이션의 통로 사용
+
+#### github action
+- 깃허브 액션을 통해 CI & CD 자동화
 
 
 <hr>
