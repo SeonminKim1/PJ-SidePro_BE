@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/33525798/182744743-535b6add-39db-494e-9bf6-cfbff10750df.png)
+![image](https://user-images.githubusercontent.com/33525798/182977380-87448abf-53f8-4f74-b7ce-3254d58da9d4.png)
 
 ## :owl: SidePro (SideProject)
 - 개발자를 위한 사이드 프로젝트 공유 플랫폼 서비스 (with. 커피챗을 곁들인) 
