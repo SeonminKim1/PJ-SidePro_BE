@@ -9,7 +9,7 @@
 - **기간** : 2022.07.07 (목) ~ 2022.08.04 (목)
 - **Team** : 김선민 ([Github](https://github.com/SeonminKim1)), 김민기 ([Github](https://github.com/kmingky)), 박재현 ([Github](https://github.com/Aeius)), 황신혜 ([Github](https://github.com/hwangshinhye)) 
 - **FE Repo** : [Sidepro-FE](https://github.com/SeonminKim1/SidePro-FE)
-- **시연 영상** : [링크](https://drive.google.com/file/d/1WMoeDu8JlXTZY_Iiehs2pSy-rCM_wPzb/view?usp=sharing)
+- **시연 영상** : [링크](https://www.youtube.com/watch?v=Imbu132BxTA)
 
 <hr>
 
