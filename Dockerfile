@@ -6,12 +6,9 @@ COPY requirements.txt /sidepro_be/
 
 WORKDIR /sidepro_be
 
-RUN apt-get update
-RUN apt-get -y install cron
-RUN apt-get -y install vim
+RUN apt-get update && apt-get install -y cron
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 RUN service cron start
 
