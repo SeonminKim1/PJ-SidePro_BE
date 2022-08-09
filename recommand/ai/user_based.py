@@ -6,7 +6,7 @@ from sklearn.metrics import pairwise_distances
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from user import constants
 
-JACCARD_SCORE_THRESHOLD = 0.5
+JACCARD_SCORE_THRESHOLD = 0.1
 
 def make_df(data):
     base_df = pd.DataFrame(index = data['user'], columns = range(1, len(constants.SKILLS_CHOICE)+1)).fillna(0)

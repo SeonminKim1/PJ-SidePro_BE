@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
+from _utils.query_utils import query_debugger
+
 
 from .models import Comment, Project
 from .serializers import (CommentSerializer, 
@@ -85,20 +87,21 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
                 return self.pagination(project)
         # 필터링
         if filter == "views":
-            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-count')
+            project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all().order_by('-count')
             return self.pagination(project)
         elif filter == "newest":
-            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-created_date')
+            project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all().order_by('-created_date')
             return self.pagination(project)
         elif filter == "popular":
-            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-bookmark_count')                                 
+            project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all().order_by('-bookmark_count')                                 
             return self.pagination(project)
         else:
-            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all()
-            # project = Project.objects.all()
+            # project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all()
+            project = Project.objects.all()
             return self.pagination(project)
         
     # 게시글 쓰기
+    @query_debugger    
     def post(self, request):
         data = request.data.copy()
         data["user"] = request.user.id
@@ -128,7 +131,7 @@ class ProjectDetailAPIView(APIView):
     # 게시글 수정
     def put(self, request, project_id):
         try:
-            project = Project.objects.select_related("user").prefetch_related("skills").prefetch_related("comment_set").prefetch_related("bookmark").get(id=project_id)
+            project = Project.objects.select_related("user").prefetch_related("skills","comment_set","bookmark").get(id=project_id)
             # project = Project.objects.get(id=project_id)
             serializer = ProjectDetailSerializer(project, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
