@@ -102,7 +102,7 @@ else:
     "http://sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
     "http://sidepro.shop",
     "http://sidepro-sub.shop.s3-website.ap-northeast-2.amazonaws.com",
-    "http://sidepro-sub.shop",
+    "http://sidepro-sub.shop",    
     ]
 
 ROOT_URLCONF = 'sidepro.urls'
