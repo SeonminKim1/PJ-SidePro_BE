@@ -60,7 +60,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email = models.EmailField("이메일", max_length=150, unique=True, null=False, blank=False)
     password = models.CharField("비밀번호", max_length=300)
-    username = models.CharField("이름", max_length=30, null=False, blank=False)
+    username = models.CharField("닉네임", max_length=30, unique=True, null=False, blank=False)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
     last_login = models.DateTimeField("최종로그인", auto_now=True)
 

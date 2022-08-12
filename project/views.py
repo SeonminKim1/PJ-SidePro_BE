@@ -96,8 +96,8 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
             project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all().order_by('-bookmark_count')                                 
             return self.pagination(project)
         else:
-            # project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all()
-            project = Project.objects.all()
+            project = Project.objects.select_related("user").prefetch_related("comment_set","skills","bookmark").all()
+            # project = Project.objects.all()
             return self.pagination(project)
         
     # 게시글 쓰기
