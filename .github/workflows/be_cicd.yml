@@ -37,7 +37,7 @@ jobs:
         file: ./Dockerfile
         tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:lastest
         env_file: ./.env
-        
+
     # nginx:
     - name : Build Nginx image
       id: nginx_build
@@ -46,6 +46,8 @@ jobs:
         push: true
         file: ./nginx/Dockerfile
         tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro-nginx:lastest
+
+  # cd-pipeline
   cd-pipeline:
     needs: build-web-image
     name: continuos deploy
