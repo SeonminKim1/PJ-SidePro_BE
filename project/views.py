@@ -74,16 +74,26 @@ class ProjectAPIView(APIView, PaginationHandlerMixin):
     # 모든 게시물 출력
     def get(self, request):
         filter = request.GET.get("filter", None)
+        search_text = request.GET.get('search', None)
         skills = request.GET.getlist("skills", None)
-        print(skills)
-        # 검색
+        # print(filter, search_text, skills)
+        # 스킬 검색
         if skills != None:
             q = Q()
             for skill in skills:
                 q.add(Q(skills__name=skill), q.OR)
                 project = Project.objects.filter(q)
                 return self.pagination(project)
-        # 필터링
+
+        # 제목 필터링 + Username 필터링
+        if search_text != None: #  or 
+            q = Q()
+            q.add(Q(title__contains = search_text), q.OR)
+            q.add(Q(user__username__contains = search_text), q.OR)
+            project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").filter(q)
+            return self.pagination(project)            
+
+        # 조건 필터링(정렬)
         if filter == "views":
             project = Project.objects.select_related("user").prefetch_related("comment_set").prefetch_related("skills").prefetch_related("bookmark").all().order_by('-count')
             return self.pagination(project)
