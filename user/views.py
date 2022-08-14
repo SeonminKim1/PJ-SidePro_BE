@@ -117,7 +117,6 @@ class UserDupNameView(APIView):
             return Response({'result': 'true'})
         except UserModel.DoesNotExist:
             return Response({'result': 'false'})
-  
 
 # user/profile/project/
 class MyProjectView(APIView):
