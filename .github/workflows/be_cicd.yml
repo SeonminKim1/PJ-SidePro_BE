@@ -38,7 +38,7 @@ jobs:
         env_file: ./.env
 
   cd-pipeline:
-    needs: build-image
+    needs: build-web-image
     name: continuos deploy
     runs-on: ubuntu-latest
     steps:
