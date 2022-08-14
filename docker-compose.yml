@@ -17,7 +17,6 @@ services:
 
   web:
     image: yubi5050/sidepro:latest
-    command: bash -c "service cron start && python manage.py crontab add && gunicorn --workers=2 sidepro.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - 8000:8000
     working_dir: /sidepro_be/
