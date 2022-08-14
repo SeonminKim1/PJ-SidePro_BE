@@ -8,7 +8,7 @@ services:
       - 6379:6379
 
   nginx:
-    build: ./nginx
+    image: sidepro-nginx:lastest
     ports:
       - 80:80
     depends_on:
@@ -16,7 +16,7 @@ services:
       - asgiserver
 
   web:
-    build: .
+    image: sidepro:lastest
     command: bash -c "service cron start && python manage.py crontab add && gunicorn --workers=2 sidepro.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - 8000:8000
@@ -25,18 +25,14 @@ services:
       - ./:/sidepro_be/
     expose:
       - 8000
-    env_file:
-      - ./.env
 
   asgiserver:
-    build: .
+    image: sidepro:lastest
     command: daphne -u /tmp/daphne.sock sidepro.asgi:application --bind 0.0.0.0 -p 8001
     ports:
       - 8001:8001
     working_dir: /sidepro_be/
     volumes:
       - ./:/sidepro_be/
-    env_file:
-      - ./.env
     expose:
       - 8001
