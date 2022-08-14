@@ -4,8 +4,6 @@ ENV PYTHONUNBUFFERED=1
 
 COPY requirements.txt /sidepro_be/
 
-WORKDIR /sidepro_be
-
 RUN apt-get update && apt-get install -y cron
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
@@ -13,3 +11,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 RUN service cron start
 
 COPY . /sidepro_be/
+
+WORKDIR /sidepro_be

@@ -30,13 +30,23 @@ jobs:
         echo "${{ secrets.ENV_VARS }}" >> .env
     
     # Docker build -env
-    - name: Build and Push the Docker image
+    - name: Build and Push the Docker wsgi image
       id: docker_build
       uses: docker/build-push-action@v2
       with:
         push: true
         file: ./Dockerfile
         tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:latest
+        env_file: ./.env
+
+    # Docker build -env
+    - name: Build and Push the Docker asgi image
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        file: ./Dockerfile
+        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro-asgi:latest
         env_file: ./.env
 
     # nginx:
