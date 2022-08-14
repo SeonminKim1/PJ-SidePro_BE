@@ -108,7 +108,15 @@ class UserDupView(APIView):
             return Response({'result': 'true'})
         except UserModel.DoesNotExist:
             return Response({'result': 'false'})
-        
+
+# user/dup_name/
+class UserDupNameView(APIView):
+    def post(self, request):
+        try:
+            UserModel.objects.get(username=request.data['username'])
+            return Response({'result': 'true'})
+        except UserModel.DoesNotExist:
+            return Response({'result': 'false'})
   
 
 # user/profile/project/
