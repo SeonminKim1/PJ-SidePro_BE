@@ -45,7 +45,7 @@ jobs:
       with:
         push: true
         file: ./nginx/Dockerfile
-        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro-nginx:lastest
+        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro-nginx:latest
       
   # cd-pipeline
   cd-pipeline:
