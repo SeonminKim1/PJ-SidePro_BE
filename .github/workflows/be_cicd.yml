@@ -42,7 +42,7 @@ jobs:
     name: continuos deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@development
+      - uses: actions/checkout@v3
       - name: copy file via ssh password - .yaml
         uses: appleboy/scp-action@master
         with:
