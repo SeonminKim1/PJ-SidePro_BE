@@ -23,6 +23,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Create env file
     - name: create env file
       run: |
         touch .env
