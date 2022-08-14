@@ -31,7 +31,7 @@ jobs:
     
     # Docker build -env
     - name: Build and Push the Docker wsgi image
-      id: docker_build
+      id: docker_wsgi_build
       uses: docker/build-push-action@v2
       with:
         push: true
@@ -41,7 +41,7 @@ jobs:
 
     # Docker build -env
     - name: Build and Push the Docker asgi image
-      id: docker_build
+      id: docker_asgi_build
       uses: docker/build-push-action@v2
       with:
         push: true
