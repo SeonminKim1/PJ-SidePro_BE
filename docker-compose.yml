@@ -8,7 +8,7 @@ services:
       - 6379:6379
 
   nginx:
-    image: sidepro-nginx:latest
+    image: yubi5050/sidepro-nginx:latest
     ports:
       - 80:80
     depends_on:
@@ -16,7 +16,7 @@ services:
       - asgiserver
 
   web:
-    image: sidepro:latest
+    image: yubi5050/sidepro:latest
     command: bash -c "service cron start && python manage.py crontab add && gunicorn --workers=2 sidepro.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - 8000:8000
@@ -27,7 +27,7 @@ services:
       - 8000
 
   asgiserver:
-    image: sidepro:latest
+    image: yubi5050/sidepro:latest
     command: daphne -u /tmp/daphne.sock sidepro.asgi:application --bind 0.0.0.0 -p 8001
     ports:
       - 8001:8001
