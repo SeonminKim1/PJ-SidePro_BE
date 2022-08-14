@@ -17,7 +17,7 @@ services:
 
   web:
     image: yubi5050/sidepro:latest
-    command: bash -c "service cron start && python manage.py crontab add && gunicorn --workers=2 sidepro.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "cd sidepro_be/ && service cron start && python manage.py crontab add && gunicorn --workers=2 sidepro.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - 8000:8000
     working_dir: /sidepro_be/
@@ -28,10 +28,10 @@ services:
 
   asgiserver:
     image: yubi5050/sidepro:latest
+    working_dir: /sidepro_be/
     command: daphne -u /tmp/daphne.sock sidepro.asgi:application --bind 0.0.0.0 -p 8001
     ports:
       - 8001:8001
-    working_dir: /sidepro_be/
     volumes:
       - ./:/sidepro_be/
     expose:
