@@ -10,7 +10,6 @@ from django.db import connection
 
 from .models import Project
 from user.models import Skills, User
-from .serializers import ProjectDetailViewSerializer, ProjectSerializer
 
 from _utils.query_utils import query_debugger
 
@@ -22,7 +21,7 @@ class ProjectReadTest(APITestCase):
         cls.faker = Faker()
         cls.projects = []
         Skills.objects.create(name="Python")
-        for i in range(100):
+        for i in range(1):
             cls.user = User.objects.create_user(cls.faker.name(), cls.faker.word())
             for i in range(10):
                 instance = Project.objects.create(title=cls.faker.word(),

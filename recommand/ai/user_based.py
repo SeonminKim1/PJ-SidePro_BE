@@ -7,7 +7,7 @@ import threading
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from user import constants
 
-JACCARD_SCORE_THRESHOLD = 0.5
+JACCARD_SCORE_THRESHOLD = 0.1
 
 # def singleton_dec(class_):
 #     instances = {}
