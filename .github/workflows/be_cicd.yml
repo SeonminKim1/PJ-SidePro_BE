@@ -82,7 +82,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
-          script : "sh /home/ubuntu/config/deploy.sh && docker login -u ${{secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}"
+          script : "sh /home/ubuntu/config/deploy.sh && sudo docker login -u ${{secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}"
 
       # Docker-compose up
       - name: executing remote ssh commands using password
