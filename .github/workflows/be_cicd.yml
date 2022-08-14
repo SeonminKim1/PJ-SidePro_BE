@@ -5,6 +5,7 @@ on:
     branches:
       - development
 jobs:
+  # build web image
   build-web-image:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +37,15 @@ jobs:
         file: ./Dockerfile
         tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:lastest
         env_file: ./.env
-
+        
+    # nginx:
+    - name : Build Nginx image
+      id: nginx_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        file: ./nginx/Dockerfile
+        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro-nginx:lastest
   cd-pipeline:
     needs: build-web-image
     name: continuos deploy
@@ -77,9 +86,3 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
           script: "sudo docker-compose down && sudo docker-compose pull && sudo docker-compose up -d "
-
-  # nginx:
-  #   runs-on: 
-  #   - name: Build the Nginx image
-  #     run: docker build . --file nginx/Dockerfile \
-  #       --tag sidepro-be:$(date +%s)
