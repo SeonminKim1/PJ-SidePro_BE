@@ -50,7 +50,6 @@ class UploadS3(APIView):
         url =  "https://" + os.environ.get("AWS_BUCKET_NAME") + ".s3.ap-northeast-2.amazonaws.com/"+ 'user-imgs/' + file_name + '.' + file_extension        
         return Response({"success":"S3 업로드 성공!", "url": url})
 
-
 # user/join/
 class JoinView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -101,6 +100,24 @@ class UserAPIView(APIView):
         except ObjectDoesNotExist:
             raise Http404("해당 유저를 찾을 수 없습니다.")
 
+# user/dup/
+class UserDupView(APIView):
+    def post(self, request):
+        try:
+            UserModel.objects.get(email=request.data['email'])
+            return Response({'result': 'true'})
+        except UserModel.DoesNotExist:
+            return Response({'result': 'false'})
+
+# user/dup_name/
+class UserDupNameView(APIView):
+    def post(self, request):
+        try:
+            UserModel.objects.get(username=request.data['username'])
+            return Response({'result': 'true'})
+        except UserModel.DoesNotExist:
+            return Response({'result': 'false'})
+  
 
 # user/profile/project/
 class MyProjectView(APIView):
