@@ -35,7 +35,7 @@ jobs:
       with:
         push: true
         file: ./Dockerfile
-        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:lastest
+        tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:latest
         env_file: ./.env
 
     # nginx:
