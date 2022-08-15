@@ -9,7 +9,7 @@ jobs:
   build-web-image:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    # - uses: actions/checkout@v3
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -28,6 +28,7 @@ jobs:
       run: |
         touch .env
         echo "${{ secrets.ENV_VARS }}" >> .env
+        ls
     
     # Docker build -env
     - name: Build and Push the Docker wsgi image
