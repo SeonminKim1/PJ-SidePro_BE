@@ -96,11 +96,13 @@ if os.environ.get('IS_LOCAL') == 'TRUE':
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:5500",
         "http://127.0.0.1:5500",
+        
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
     "http://sidepro.shop.s3-website.ap-northeast-2.amazonaws.com",
     "http://sidepro.shop",
+    "http://www.sidepro.shop",
     ]
 
 ROOT_URLCONF = 'sidepro.urls'
