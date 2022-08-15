@@ -12,4 +12,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 RUN service cron start
 
-COPY . /sidepro_be/
+COPY ../ /sidepro_be/
