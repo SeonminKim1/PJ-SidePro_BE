@@ -6,7 +6,7 @@ COPY . /sidepro_be/
 
 # COPY requirements.txt /sidepro_be/
 
-WORKDIR /sidepro_be
+WORKDIR /sidepro_be 
 
 RUN apt-get update && apt-get install -y cron
 
