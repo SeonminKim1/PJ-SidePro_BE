@@ -3,7 +3,7 @@ name: BE-CI-CD
 on:
   push:
     branches:
-      - publish
+      - development
 jobs:
   build-web-image:
     runs-on: ubuntu-latest
@@ -36,31 +36,43 @@ jobs:
         file: ./Dockerfile
         tags : ${{ secrets.DOCKERHUB_USERNAME }}/sidepro:lastest
         env_file: ./.env
-
-  # nginx:
-  #   runs-on: 
-  #   - name: Build the Nginx image
-  #     run: docker build . --file nginx/Dockerfile \
-  #       --tag sidepro-be:$(date +%s)
-
-  # cd-pipeline:
-  #   needs: build-image
-  #   name: continuos deploy
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@publish
-  #     - name: copy file via ssh password
-  #       uses: appleboy/scp-action@master
-  #       with:
-  #         host: ${{ secrets.EC2_PRIVATE_HOST }}
-  #         username: ubuntu
-  #         key: ${{ secrets.EC2_PRIVATE_KEY }}
-  #         source: "docker-compose.yml"
-  #         target: "/home/ubuntu/"
-  #     - name: executing remote ssh commands using password
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.EC2_PRIVATE_HOST }}
-  #         username: ubuntu
-  #         key: ${{ secrets.EC2_PRIVATE_KEY }}
-  #         script: "docker-compose pull && docker-compose up -d"
+  cd-pipeline:
+    needs: build-web-image
+    name: continuos deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@development
+      - name: copy file via ssh password - .yaml
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "/home/ubuntu/"
+      - name: copy file via ssh password - .sh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          source: "config/deploy.sh"
+          target: "/home/ubuntu/"
+      - name: docker, docker-compose install
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          script : "sh /home/ubuntu/config/deploy.sh"
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          script: "sudo docker-compose down && sudo docker-compose pull && sudo docker-compose up -d "
