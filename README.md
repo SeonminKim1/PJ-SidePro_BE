@@ -165,38 +165,64 @@
 ![image](https://user-images.githubusercontent.com/33525798/182768639-acd8910e-d91b-4ff3-8e5b-635d7fcd7c37.png)
 
 ## 🛡 Trouble Shooting
-#### 🛠 서비스 비대응시간 최소화
+<details>
+<summary>🛠 서비스 비대응시간 최소화 브랜치 전략</summary>
+<div markdown="1">
 
-#### 🎈 문제 발생
+## ⚡ 문제 발생
 - EC2 단일 서버에서 서비스 대응 중 Bug가 발견되어 수정 소요가 발생
 - 재빌드 및 재배포 과정에서 서비스 중단 시간이 생기게 됨 
 - Bug 수정 후 재배포 간 추가 Bug 발생으로 빌드 실패 => "Bug 발생 + 오류 DEBUGGING 시간 + 재빌드 시간" 등 서비스 중단 시간이 계속 늘어나게 됨   
 
-
-#### 🎈 문제 정의
+## ⚡ 문제 정의
 - 단일 EC2에서 서비스를 대응 및 수정 사항을 직접 반영하다보니, 개발(수정)시 서비스가 중단되야 되는 상황 발생
 - CD(Continuous Deployment)과정에서 Git Main Branch => Publish Branch로 배포하는 Branch 전략에 문제가 있다고 판단
 
 
-#### 🎈 문제 해결 방법
+## ⚡ 문제 해결 방법
 - Dev Branch 배포 서버 추가 (개발자용 배포 서버)
 - 기존 배포 전략 : Main(개발, local)⇒ Publish (서비스, 배포O)
 - 수정 후 배포 전략 : Main(개발, local) ⇒ Development (개발, 배포O) ⇒ Publish (서비스, 배포O)
 - Dev Branch에서 최종 완료 확인 후 Publish 로 배포
+</div>
+</details>
+
+<details>
+<summary>🛠 동시성 문제 (Concurrency) 발생</summary>
+<div markdown="1">
+   
+## ⚡ 문제 발생
+게시물 상세 조회시 여러명(N)이 동시에 접근하였더니, 조회수가 N이 오르지 않고, N 미만의 숫자가 오름 (조회수, 북마크 수, 댓글 수 등에 동시성 이슈 확인)
+   
+## ⚡ 문제 이해
+PostgreSQL은 기본적으로 READ COMMITTED의 Transaction 격리 환경을 가지고 있어, 한 유저의 Transaction이 값을 수정 중이더라도, 다른 유저의 Transaction이 접근 가능하고, commit 되기 전, 순차적으로 commit에 더하는 것이 아닌, 이전 commit 값을 같이 바라보고 같은 값으로 수정하게 되는 현상 발생
+   
+## ⚡ 문제 해결 방법
+Django에서 제공해주는 F Method 활용하여 Python 메모리 로드 없이 DB단에서 즉석 반영하게 함. 총 3건 (조회수, 북마크 수, 댓글 수) 에 적용하였고, Curl 메소드로 테스트시 정상적으로 실행되는 것 확인.
+   
+
+![image](https://user-images.githubusercontent.com/33525798/185803509-e76fd179-c814-47e7-9e8b-bf44d92d04df.png)
+</div>
+</details>
 
 
-#### 🛠 Query 최적화
-⚔ DRF ORM select_related(), prefetch_related()를 이용하여 쿼리 최적화 진행
+<details>
+<summary>🛠 Query 최적화</summary>
+<div markdown="1">
+   
+## ⚡ DRF ORM select_related(), prefetch_related()를 이용하여 쿼리 최적화 진행
  - 지연로딩을 사용할 경우 연관관계가 있는 엔티티가 필요한 경우라면, Select 쿼리를 여러번 수행해서 엔티티를 조회하게 되므로
 따라서 성능에 문제가 생길 수 있다. select_related, prefetch_related를 사용하여 즉시로딩 (Eager Loading)하여 쿼리를 최적화하였습니다.
 
 ![image](https://user-images.githubusercontent.com/87006912/186122633-6559c12d-e530-4f30-9ffe-ad3a807738ae.png)
 
 
-⚔ django 내장 모듈을 이용하여 transaction 경험
+## ⚡ django 내장 모듈을 이용하여 transaction 경험
  - 통신 도중 연결이 끊긴다거나 오류 발생 시 여러개의 insert, update 쿼리가 발생될 때 중간 과정에 끊길 경우 DB데이터에 대한 신뢰성이 깨질 수 있기 때문에
 @transaction.atomic을 이용해서 SAVEPOINT를 이용하여 모든 쿼리가 성공했을 때 DB에 반영되도록 하게 만들었습니다.
 ![image](https://user-images.githubusercontent.com/87006912/186122706-651ce0ff-5500-4e21-9e6c-aa0c467ed1c3.png)
 
 
 블로그 정리내용(https://psb6604.tistory.com/69)
+</div>
+</details>
